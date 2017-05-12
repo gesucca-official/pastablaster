@@ -1,0 +1,23 @@
+{
+	"build_systems":
+	[
+		{
+			"cmd": "./build.sh",
+			"name": "Build and Run",
+			"working_dir": "${project_path:${folder}}"
+		}
+	],
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				"lib"
+			],
+			"path": "."
+		}
+	],
+	"settings":
+	{
+	}
+}
