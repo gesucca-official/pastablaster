@@ -1,6 +1,8 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
+
 int main() {
 
 	// Create the main world (random resolution for now)
@@ -12,12 +14,15 @@ int main() {
 	// activate it
 	window.setView(view);
 
-	// Load a sprite to display
+	// Load a big mario to display
 	sf::Texture texture;
 	if (!texture.loadFromFile("./img/Mario_Nintendo.png"))
 		return EXIT_FAILURE;
-	sf::Sprite sprite(texture);
-	sprite.move(200, 50);
+	sf::Sprite bigMario(texture);
+	bigMario.move(200, 50);
+	bool isMarioJumping = false;
+	int jumpSpan = 25;
+	int preJumpY;
 
 	// Create a graphical text to display
 	sf::Font font;
@@ -39,6 +44,25 @@ int main() {
 	// Start the game loop
 	while (window.isOpen()) {
 
+		// Jump handle
+		if (isMarioJumping) {
+			/*
+			std::cout << "prehump + span ";
+			std::cout << preJumpY+jumpSpan;
+			std::cout << "\n";
+
+			std::cout << "position ";
+			std::cout << bigMario.getPosition().y;
+			std::cout << "\n";
+			*/
+
+			if ((bigMario.getPosition().y+jumpSpan) > preJumpY)
+				bigMario.move(0, -5);
+			else
+				// return the fuck down!!
+				isMarioJumping = false;
+		}
+
 		 // Process events
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -56,16 +80,22 @@ int main() {
 				if (event.key.code == sf::Keyboard::Escape)
 					window.close();
 
-
 			// WASD: move the big Mario
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-					sprite.move(0, -3);
+					bigMario.move(0, -3);
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-					sprite.move(-3, 0);
+					bigMario.move(-3, 0);
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-					sprite.move(0, 3);
+					bigMario.move(0, 3);
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-					sprite.move(3, 0);
+					bigMario.move(3, 0);
+
+			// JUMP WITH SPACE
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+					isMarioJumping = true;
+					preJumpY = bigMario.getPosition().y;
+					//std::cout << preJumpY;
+				}
 
 			// ARROWS: adjust view
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
@@ -90,7 +120,7 @@ int main() {
 		window.clear();
 
 		// Draw stuff
-		window.draw(sprite);
+		window.draw(bigMario);
 		window.draw(text);
 		window.draw(shape);
 
@@ -99,3 +129,27 @@ int main() {
 
 	return EXIT_SUCCESS;
 }
+
+/*
+class Mario {
+public:
+   void Jump();
+   void Draw(sf::RenderWindow &Window);
+   void Update();
+private:
+   sf::Sprite Sprite;
+   bool IsJumping;
+};
+
+void Mario::Jump() {
+   IsJumping = true;
+}
+
+void Mario::Update() {
+   if(IsJumping) {
+      same jumping logic as above
+   }
+   
+   some more updating logic
+}
+*/
