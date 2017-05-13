@@ -1,42 +1,73 @@
-#include <SFML/Audio.hpp>
-#include <SFML/Graphics.hpp>
+#include "mmedia.h"
 
+#include <vector>
+std::vector<DrawableObj> thingsToDraw;
+
+//ok things are starting to get weird
 #include <iostream>
+// DO A SIMPLE TEXTURE MAP AND CALL IT A DAY, THIS WAY I'M GETTING INSANE
+
+void initDrawables(DuelModel *dm) {
+	//creates drawable objects from model element
+	std::vector<Element> v = dm->getElements();
+	std::cout << "imma fuckin here3333";
+	for (int i = 0; i < v.size(); i++) {
+		DrawableObj d(v[i]);
+		std::cout << "imma fuckin here";
+		thingsToDraw.push_back(d);
+	}
+}
+
+DuelModel* getDuelModel() {
+	//for now I do it here
+	DuelModel *dm = new DuelModel();
+
+	Element stage;
+	char stageImg[] = "./img/ground.jpg";
+	stage.setImg(stageImg);
+
+	dm->addElement(stage);
+	return dm;
+}
 
 int main() {
 
 	// Create the main world (random resolution for now)
-	sf::RenderWindow window(sf::VideoMode(800, 600), "Duel Screen", sf::Style::Fullscreen);
+	RenderWindow window(sf::VideoMode(800, 600), "Duel Screen", Style::Fullscreen);
 
 	// create a view centered in 0,0, res 800*600
-	sf::View view(sf::FloatRect(0, 0, 800, 600));
+	View view(FloatRect(0, 0, 800, 600));
 
 	// activate it
 	window.setView(view);
 
+///////////////////////try to start a structure
+	initDrawables(getDuelModel());
+	
+
 	// Load a big mario to display
-	sf::Texture texture;
+	Texture texture;
 	if (!texture.loadFromFile("./img/Mario_Nintendo.png"))
 		return EXIT_FAILURE;
-	sf::Sprite bigMario(texture);
+	Sprite bigMario(texture);
 	bigMario.move(200, 50);
 	bool isMarioJumping = false;
 	int jumpSpan = 25;
 	int preJumpY;
 
 	// Create a graphical text to display
-	sf::Font font;
+	Font font;
 	if (!font.loadFromFile("./fnt/blk_dmd.ttf"))
 		return EXIT_FAILURE;
-	sf::Text text("This thing works!", font, 50);
+	Text text("This thing works!", font, 50);
 	text.move(300, 400);
 
 	// Create a green circle for its own sake
-	sf::CircleShape shape(100.f);
-	shape.setFillColor(sf::Color::Green);
+	CircleShape shape(100.f);
+	shape.setFillColor(Color::Green);
 
 	// Load a music to play
-	sf::Music music;
+	Music music;
 	if (!music.openFromFile("./sng/song.ogg"))
 		return EXIT_FAILURE;
 	music.setLoop(true);
@@ -64,53 +95,53 @@ int main() {
 		}
 
 		 // Process events
-		sf::Event event;
+		Event event;
 		while (window.pollEvent(event)) {
 
 			// LEFT CLICK: Play the music
-			if (event.type == sf::Event::MouseButtonPressed) {
-				if (event.mouseButton.button == sf::Mouse::Left) 
+			if (event.type == Event::MouseButtonPressed) {
+				if (event.mouseButton.button == Mouse::Left) 
 					music.play();
-				if (event.mouseButton.button == sf::Mouse::Right) 
+				if (event.mouseButton.button == Mouse::Right) 
 					music.pause();
 			}
 
 			// ESC BUTTON: exit
-			if (event.type == sf::Event::KeyPressed) {
-				if (event.key.code == sf::Keyboard::Escape)
+			if (event.type == Event::KeyPressed) {
+				if (event.key.code == Keyboard::Escape)
 					window.close();
 
 			// WASD: move the big Mario
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+				if (Keyboard::isKeyPressed(Keyboard::W))
 					bigMario.move(0, -3);
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+				if (Keyboard::isKeyPressed(Keyboard::A))
 					bigMario.move(-3, 0);
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+				if (Keyboard::isKeyPressed(Keyboard::S))
 					bigMario.move(0, 3);
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+				if (Keyboard::isKeyPressed(Keyboard::D))
 					bigMario.move(3, 0);
 
 			// JUMP WITH SPACE
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+				if (Keyboard::isKeyPressed(Keyboard::Space)) {
 					isMarioJumping = true;
 					preJumpY = bigMario.getPosition().y;
 					//std::cout << preJumpY;
 				}
 
 			// ARROWS: adjust view
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+				if (Keyboard::isKeyPressed(Keyboard::Up)) {
 					view.move(0, -2);
 					window.setView(view);
 				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+				if (Keyboard::isKeyPressed(Keyboard::Down)) {
 					view.move(0, 2);
 					window.setView(view);
 				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+				if (Keyboard::isKeyPressed(Keyboard::Left)) {
 					view.move(-2, 0);
 					window.setView(view);
 				}
-				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+				if (Keyboard::isKeyPressed(Keyboard::Right)) {
 					view.move(2, 0);
 					window.setView(view);
 				}
@@ -118,6 +149,10 @@ int main() {
 		}
 
 		window.clear();
+
+		// draw AAAALL the stuff
+		for (int i = 0; i < thingsToDraw.size(); i++)
+			thingsToDraw[i].draw(window);
 
 		// Draw stuff
 		window.draw(bigMario);
@@ -134,7 +169,7 @@ int main() {
 class Mario {
 public:
    void Jump();
-   void Draw(sf::RenderWindow &Window);
+   void Draw(RenderWindow &Window);
    void Update();
 private:
    sf::Sprite Sprite;
@@ -151,5 +186,18 @@ void Mario::Update() {
    }
    
    some more updating logic
+}
+*/
+
+/*
+int main()
+{
+    vector<string> list;
+    list.push_back("foo");
+    list.push_back("bar");
+    for( vector<string>::const_iterator it = list.begin(); it != list.end(); ++it )
+        cout << *it << endl;
+
+    return 0;
 }
 */
