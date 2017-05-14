@@ -1,39 +1,13 @@
-#include "mmedia.h"
+#include <SFML/Audio.hpp>
 
-#include <vector>
-std::vector<DrawableObj> thingsToDraw;
+#include "Player.hpp"
 
-//ok things are starting to get weird
-#include <iostream>
-// DO A SIMPLE TEXTURE MAP AND CALL IT A DAY, THIS WAY I'M GETTING INSANE
-
-void initDrawables(DuelModel *dm) {
-	//creates drawable objects from model element
-	std::vector<Element> v = dm->getElements();
-	std::cout << "imma fuckin here3333";
-	for (int i = 0; i < v.size(); i++) {
-		DrawableObj d(v[i]);
-		std::cout << "imma fuckin here";
-		thingsToDraw.push_back(d);
-	}
-}
-
-DuelModel* getDuelModel() {
-	//for now I do it here
-	DuelModel *dm = new DuelModel();
-
-	Element stage;
-	char stageImg[] = "./img/ground.jpg";
-	stage.setImg(stageImg);
-
-	dm->addElement(stage);
-	return dm;
-}
+using namespace sf;
 
 int main() {
 
 	// Create the main world (random resolution for now)
-	RenderWindow window(sf::VideoMode(800, 600), "Duel Screen", Style::Fullscreen);
+	RenderWindow window(VideoMode(800, 600), "Duel Screen", Style::Fullscreen);
 
 	// create a view centered in 0,0, res 800*600
 	View view(FloatRect(0, 0, 800, 600));
@@ -41,9 +15,13 @@ int main() {
 	// activate it
 	window.setView(view);
 
-///////////////////////try to start a structure
-	initDrawables(getDuelModel());
-	
+	//try drawable obj
+	char lanscapePath[] = "./img/ground.jpg";
+	DrawableObj landscape(lanscapePath);
+
+	//another big mario
+	char marioPath[] = "./img/Mario_Nintendo.png";
+	Player mario(marioPath);
 
 	// Load a big mario to display
 	Texture texture;
@@ -77,17 +55,7 @@ int main() {
 
 		// Jump handle
 		if (isMarioJumping) {
-			/*
-			std::cout << "prehump + span ";
-			std::cout << preJumpY+jumpSpan;
-			std::cout << "\n";
-
-			std::cout << "position ";
-			std::cout << bigMario.getPosition().y;
-			std::cout << "\n";
-			*/
-
-			if ((bigMario.getPosition().y+jumpSpan) > preJumpY)
+				if ((bigMario.getPosition().y+jumpSpan) > preJumpY)
 				bigMario.move(0, -5);
 			else
 				// return the fuck down!!
@@ -97,6 +65,8 @@ int main() {
 		 // Process events
 		Event event;
 		while (window.pollEvent(event)) {
+
+			mario.handleControls(event);
 
 			// LEFT CLICK: Play the music
 			if (event.type == Event::MouseButtonPressed) {
@@ -150,9 +120,8 @@ int main() {
 
 		window.clear();
 
-		// draw AAAALL the stuff
-		for (int i = 0; i < thingsToDraw.size(); i++)
-			thingsToDraw[i].draw(window);
+		landscape.draw(window);
+		mario.draw(window);
 
 		// Draw stuff
 		window.draw(bigMario);
