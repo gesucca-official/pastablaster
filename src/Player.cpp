@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(char img[], ControlSet ctrl) : Persona(img) {
+Player::Player(char img[], ControlSet ctrl) : Persona(img, 0, 0) {
 	controls = ctrl;
 }
 

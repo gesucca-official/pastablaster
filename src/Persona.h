@@ -1,7 +1,7 @@
 #include "models.h"
 #include "interface.h"
 
-class Persona: public DrawableObj, public ModeledObj {
+class Persona: public GameObj, public DrawableObj, public ModeledObj {
 
 private:
 	float currentSpeed;
@@ -14,11 +14,12 @@ private:
 	Direction dir; //implement direction drawings on drawableobj level?
 
 public:
-	Persona(char img[]);
+	Persona(char img[], int posX, int posY);
 
 	void update();
 	void collide(ModeledObj &collided);
 	sf::FloatRect getBound();
+	bool exist();
 
 	void run(Direction d);
 	void stop();

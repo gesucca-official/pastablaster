@@ -26,8 +26,9 @@ int main() {
 
 	//landscape
 	char lanscapePath[] = "./img/ground.jpg";
-	DrawableObj landscape(lanscapePath);
-	toBeDrawn.push_back(&landscape);
+	//make concrete type!
+	//DrawableObj landscape(lanscapePath);
+	//toBeDrawn.push_back(&landscape);
 
 	// Load a music to play
 	Music music;
@@ -49,12 +50,11 @@ int main() {
 	toBeUpd.push_back(&mario);
 	playerSide.push_back(&mario);
 
-// a bad guy to test collisions
-	Persona badguy(marioPath);
+	// a bad guy to test collisions
+	Persona badguy(marioPath, 500, 200);
 	toBeDrawn.push_back(&badguy);
 	toBeUpd.push_back(&badguy);
 	oppoSide.push_back(&badguy);
-	//position it somewhere else!
 
 	// Start the game loop
 	while (window.isOpen()) {
@@ -100,8 +100,16 @@ int main() {
 
 		window.clear();
 
-//implement garbage collection on vectors!!
-		
+//implement garbage collection on ALL vectors!!
+		for (int i=0; i<toBeDrawn.size(); i++)
+		{
+			if (!toBeDrawn[i]->exist())
+			{
+				toBeDrawn.erase(std::remove(toBeDrawn.begin(), toBeDrawn.end(), toBeDrawn[i]), toBeDrawn.end());
+			}
+
+		}
+
 		for (int i=0; i<toBeUpd.size(); i++)
 			toBeUpd[i]->update();
 		for (int i=0; i<toBeDrawn.size(); i++)
