@@ -13,3 +13,10 @@ typedef struct {
 	sf::Keyboard::Key ability3;
 	sf::Keyboard::Key ability4;
 } ControlSet;
+
+typedef enum {
+	N,
+	S,
+	E,
+	W
+} Direction;

@@ -15,7 +15,12 @@ public:
 	}
 };
 
-class UpdatableObj {
+class ModeledObj {
 public:
+	bool removedFromField; //to be garbage collected before next draw
+
 	virtual void update() = 0;
+	virtual void collide(ModeledObj &collided) = 0;
+	virtual sf::FloatRect getBound() = 0;
+
 };

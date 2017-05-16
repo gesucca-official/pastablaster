@@ -1,13 +1,7 @@
-#include "drw_upd.h"
+#include "models.h"
+#include "interface.h"
 
-typedef enum {
-	N,
-	S,
-	E,
-	W
-} Direction;
-
-class Persona: public DrawableObj, public UpdatableObj {
+class Persona: public DrawableObj, public ModeledObj {
 
 private:
 	float currentSpeed;
@@ -21,7 +15,11 @@ private:
 
 public:
 	Persona(char img[]);
+
 	void update();
+	void collide(ModeledObj &collided);
+	sf::FloatRect getBound();
+
 	void run(Direction d);
 	void stop();
 	void teleport();

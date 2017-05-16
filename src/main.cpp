@@ -1,6 +1,14 @@
+#include <vector>
+
 #include <SFML/Audio.hpp>
 
-#include "globals.h"
+#include "Player.h"
+
+//globals
+std::vector<DrawableObj*> toBeDrawn;
+std::vector<ModeledObj*> toBeUpd;
+std::vector<ModeledObj*> playerSide;
+std::vector<ModeledObj*> oppoSide;
 
 using namespace sf;
 
@@ -39,6 +47,14 @@ int main() {
 	Player mario(marioPath, marioControls);
 	toBeDrawn.push_back(&mario);
 	toBeUpd.push_back(&mario);
+	playerSide.push_back(&mario);
+
+// a bad guy to test collisions
+	Persona badguy(marioPath);
+	toBeDrawn.push_back(&badguy);
+	toBeUpd.push_back(&badguy);
+	oppoSide.push_back(&badguy);
+	//position it somewhere else!
 
 	// Start the game loop
 	while (window.isOpen()) {
@@ -84,16 +100,26 @@ int main() {
 
 		window.clear();
 
+//implement garbage collection on vectors!!
+		
 		for (int i=0; i<toBeUpd.size(); i++)
 			toBeUpd[i]->update();
 		for (int i=0; i<toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
-		window.display();
-	}
+		for (int i=0; i<playerSide.size(); i++)
+			for (int j=0; j<oppoSide.size(); j++)
+				if (playerSide[i]->getBound().intersects(oppoSide[j]->getBound())) {
+					playerSide[i]->collide(*oppoSide[j]);
+					oppoSide[j]->collide(*playerSide[i]);
+				}
 
-	return EXIT_SUCCESS;
-}
+
+				window.display();
+			}
+
+			return EXIT_SUCCESS;
+		}
 
 /*
 class Mario {

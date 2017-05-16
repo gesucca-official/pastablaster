@@ -39,6 +39,16 @@ void Persona::update() {
 		currentSpeed = 0;
 }
 
+void Persona::collide(ModeledObj &collided) {
+//...invent something to determine what to do based on whatI have collided with
+	//for now...
+	removedFromField = true;
+
+}
+
+sf::FloatRect Persona::getBound() {
+	return sprite->getGlobalBounds();
+}
 
 void Persona::run(Direction d) {
 	running = true;

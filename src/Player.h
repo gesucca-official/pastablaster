@@ -1,4 +1,3 @@
-#include "interface.h"
 #include "Persona.h"
 
 class Player : public Persona {
