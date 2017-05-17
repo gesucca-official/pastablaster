@@ -31,4 +31,5 @@ public:
 	virtual void collide(ModeledObj &collided) = 0;
 	virtual sf::FloatRect getBound() = 0;
 	virtual bool exist() = 0;
+	virtual float getCollisionDmg() = 0;
 };

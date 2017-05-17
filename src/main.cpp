@@ -1,16 +1,13 @@
-#include <vector>
-
 #include <SFML/Audio.hpp>
 
-#include "Player.h"
+#include "headers/engine.h"
 
-//globals
+using namespace sf;
+
 std::vector<DrawableObj*> toBeDrawn;
 std::vector<ModeledObj*> toBeUpd;
 std::vector<ModeledObj*> playerSide;
 std::vector<ModeledObj*> oppoSide;
-
-using namespace sf;
 
 int main() {
 
@@ -25,7 +22,7 @@ int main() {
 	window.setView(view);
 
 	//landscape
-	char lanscapePath[] = "./img/ground.jpg";
+	//char lanscapePath[] = "./img/ground.jpg";
 	//make concrete type!
 	//DrawableObj landscape(lanscapePath);
 	//toBeDrawn.push_back(&landscape);
@@ -100,34 +97,21 @@ int main() {
 
 		window.clear();
 
-//implement garbage collection on ALL vectors!!
-		for (int i=0; i<toBeDrawn.size(); i++)
-		{
-			if (!toBeDrawn[i]->exist())
-			{
-				toBeDrawn.erase(std::remove(toBeDrawn.begin(), toBeDrawn.end(), toBeDrawn[i]), toBeDrawn.end());
-			}
+		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
-		}
-
+		//update and draw
 		for (int i=0; i<toBeUpd.size(); i++)
 			toBeUpd[i]->update();
 		for (int i=0; i<toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
-		for (int i=0; i<playerSide.size(); i++)
-			for (int j=0; j<oppoSide.size(); j++)
-				if (playerSide[i]->getBound().intersects(oppoSide[j]->getBound())) {
-					playerSide[i]->collide(*oppoSide[j]);
-					oppoSide[j]->collide(*playerSide[i]);
-				}
+		detectCollisions(playerSide, oppoSide);
 
+		window.display();
+	}
 
-				window.display();
-			}
-
-			return EXIT_SUCCESS;
-		}
+	return EXIT_SUCCESS;
+}
 
 /*
 class Mario {

@@ -4,6 +4,9 @@
 class Persona: public GameObj, public DrawableObj, public ModeledObj {
 
 private:
+	float hp;
+	float collisionDmg;
+
 	float currentSpeed;
 	float maxSpeed;
 	float accel;
@@ -21,7 +24,21 @@ public:
 	sf::FloatRect getBound();
 	bool exist();
 
+	float getCollisionDmg();
+
 	void run(Direction d);
 	void stop();
 	void teleport();
+};
+
+class Player : public Persona {
+public:
+	Player(char img[], ControlSet ctrl);
+	void handleControls(sf::Event event);
+
+private:
+	ControlSet controls;
+	//abilities
+	void sparks(sf::RenderWindow &window);
+
 };

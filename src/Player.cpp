@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "headers/actors.h"
 
 Player::Player(char img[], ControlSet ctrl) : Persona(img, 0, 0) {
 	controls = ctrl;

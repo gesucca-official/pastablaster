@@ -1,8 +1,9 @@
-#include "Persona.h"
+#include "headers/actors.h"
 
-#include <iostream>
-
-Persona::Persona(char img[], int posX, int posY) : GameObj(), DrawableObj(img){ //just for now I init here
+Persona::Persona(char img[], int posX, int posY) : GameObj(), DrawableObj(img){
+	//all this stuff should be imported from somewhere
+	hp = 100.0;
+	collisionDmg = 25.0;
 	currentSpeed = 0.0;
 	maxSpeed = 4.5;
 	accel = 0.02;
@@ -11,6 +12,7 @@ Persona::Persona(char img[], int posX, int posY) : GameObj(), DrawableObj(img){ 
 	teleportDist = 100.0;
 	teleporting = false;
 
+	//default position
 	sprite->move(posX, posY);
 }
 
@@ -42,10 +44,13 @@ void Persona::update() {
 }
 
 void Persona::collide(ModeledObj &collided) {
-//...invent something to determine what to do based on whatI have collided with
-	//for now...
-	GameObj::exist = false;
-	//std::cout << "collided";
+
+	hp-=collided.getCollisionDmg();
+
+	if (hp<=0.0)
+		GameObj::exist = false;
+
+	//this is to be improved...
 	currentSpeed = 0;
 
 	if (dir==E)
@@ -56,6 +61,10 @@ void Persona::collide(ModeledObj &collided) {
 		sprite->move(0, 20);
 	if (dir==S) 
 		sprite->move(0, -20);
+}
+
+float Persona::getCollisionDmg() {
+	return collisionDmg;
 }
 
 sf::FloatRect Persona::getBound() {
