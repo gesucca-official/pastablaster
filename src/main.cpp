@@ -21,17 +21,14 @@ int main() {
 	// activate it
 	window.setView(view);
 
-	//landscape
-	//char lanscapePath[] = "./img/ground.jpg";
-	//make concrete type!
-	//DrawableObj landscape(lanscapePath);
-	//toBeDrawn.push_back(&landscape);
+	// stage
+	char stagePath[] = "./img/ground.jpg";
+	char musicPath[] =  "./sng/song.ogg";
 
-	// Load a music to play
-	Music music;
-	if (!music.openFromFile("./sng/song.ogg"))
-		return EXIT_FAILURE;
-	music.setLoop(true);
+	Stage stage(stagePath, musicPath);
+	stage.music.setLoop(true);
+	stage.music.play();
+	toBeDrawn.push_back(&stage);
 
 	// big mario
 	char marioPath[] = "./img/Mario_Nintendo.png";
@@ -41,14 +38,24 @@ int main() {
 	marioControls.goUp = Keyboard::W;
 	marioControls.goDown = Keyboard::S;
 	marioControls.teleport = Keyboard::Space;
+	marioControls.ability1 = Keyboard::M;
 
-	Player mario(marioPath, marioControls);
+	Stats s;
+	s.hp = 100.0;
+	s.weigth = 2.0;
+	s.collisionDmg = 25.0;
+	s.maxSpeed=8.0;
+	s.accel= 1.0;
+	s.decel = 1.0;
+	s.teleportDist=100.0;
+
+	Player mario(marioPath, s, marioControls);
 	toBeDrawn.push_back(&mario);
 	toBeUpd.push_back(&mario);
 	playerSide.push_back(&mario);
 
 	// a bad guy to test collisions
-	Persona badguy(marioPath, 500, 200);
+	Persona badguy(marioPath, 500, 200, s);
 	toBeDrawn.push_back(&badguy);
 	toBeUpd.push_back(&badguy);
 	oppoSide.push_back(&badguy);
@@ -60,15 +67,7 @@ int main() {
 		Event event;
 		while (window.pollEvent(event)) {
 
-			mario.handleControls(event);
-
-			// LEFT CLICK: Play the music
-			if (event.type == Event::MouseButtonPressed) {
-				if (event.mouseButton.button == Mouse::Left) 
-					music.play();
-				if (event.mouseButton.button == Mouse::Right) 
-					music.pause();
-			}
+			mario.handleControls(event, toBeDrawn);
 
 			// ESC BUTTON: exit
 			if (event.type == Event::KeyPressed) {

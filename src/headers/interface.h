@@ -1,5 +1,7 @@
 #include <SFML/Window.hpp>
 
+#define MAX_PATH_LEN 30
+
 typedef struct {
 	sf::Keyboard::Key goRight;
 	sf::Keyboard::Key goLeft;
@@ -14,9 +16,31 @@ typedef struct {
 	sf::Keyboard::Key ability4;
 } ControlSet;
 
-typedef enum {
-	N,
-	S,
-	E,
-	W
-} Direction;
+typedef struct {
+	float dmg;
+	int bullets;
+	char bulletImg[MAX_PATH_LEN];
+	float bulletSpeed;
+	float shootSpeed;
+} Weapon;
+
+typedef struct {
+	Weapon w1;
+	Weapon w2;
+	Weapon w3;
+	Weapon w4;
+} WeaponSet;
+
+typedef struct {
+	float hp;
+	float weigth;
+
+	float collisionDmg;
+	WeaponSet ws;
+	
+	float maxSpeed;
+	float accel;
+	float decel;
+	
+	float teleportDist;
+} Stats;

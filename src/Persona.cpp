@@ -1,22 +1,33 @@
-#include "headers/actors.h"
+#include "headers/objects.h"
 
-Persona::Persona(char img[], int posX, int posY) : GameObj(), DrawableObj(img){
-	//all this stuff should be imported from somewhere
-	hp = 100.0;
-	collisionDmg = 25.0;
-	currentSpeed = 0.0;
-	maxSpeed = 4.5;
-	accel = 0.02;
-	decel = 0.04;
+Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableObj(img){
+	stats = s;
+	
 	running = false;
-	teleportDist = 100.0;
 	teleporting = false;
+	bouncing = false;
 
 	//default position
 	sprite->move(posX, posY);
 }
 
 void Persona::update() {
+	if (currentSpeed<stats.weigth)
+		bouncing = false;
+
+	if (bouncing) {
+		if (dir==E)
+			sprite->move(-currentSpeed, 0);
+		if (dir==W) 
+			sprite->move(currentSpeed, 0);
+		if (dir==N) 
+			sprite->move(0, currentSpeed);
+		if (dir==S) 
+			sprite->move(0, -currentSpeed);
+		currentSpeed-= (stats.decel + stats.weigth/9);
+		return;
+	}
+
 	if (dir==E)
 		sprite->move(currentSpeed, 0);
 	if (dir==W) 
@@ -27,17 +38,17 @@ void Persona::update() {
 		sprite->move(0, currentSpeed);
 
 	if (running) {
-		currentSpeed+=accel;
+		currentSpeed+=stats.accel;
 		// speed cap
-		if (currentSpeed>=maxSpeed) 
-			currentSpeed = maxSpeed;
+		if (currentSpeed>=stats.maxSpeed) 
+			currentSpeed = stats.maxSpeed;
 	}
 	else if (teleporting)	{
 		currentSpeed = 0;
 		teleporting = false;
 	}
 	else
-		currentSpeed-= decel;
+		currentSpeed-= stats.decel;
 
 	if (currentSpeed<0)
 		currentSpeed = 0;
@@ -45,26 +56,25 @@ void Persona::update() {
 
 void Persona::collide(ModeledObj &collided) {
 
-	hp-=collided.getCollisionDmg();
+	stats.hp-=collided.getCollisionDmg();
 
-	if (hp<=0.0)
+	//why here?
+	if (stats.hp<=0.0)
 		GameObj::exist = false;
 
-	//this is to be improved...
-	currentSpeed = 0;
-
-	if (dir==E)
-		sprite->move(-20, 0);
-	if (dir==W) 
-		sprite->move(20, 0);
-	if (dir==N) 
-		sprite->move(0, 20);
-	if (dir==S) 
-		sprite->move(0, -20);
+	//bounce!
+	running = false;
+	teleporting = false;
+	bouncing = true;
+	currentSpeed += collided.getWeight()/3;
 }
 
 float Persona::getCollisionDmg() {
-	return collisionDmg;
+	return stats.collisionDmg;
+}
+
+float Persona::getWeight() {
+	return stats.weigth;
 }
 
 sf::FloatRect Persona::getBound() {
@@ -84,8 +94,21 @@ void Persona::stop() {
 	running = false;
 }
 
+//I made this, but... why?
+void Persona::turnBack() {
+	if (dir==E)
+		dir=W;
+	if (dir==W) 
+		dir=E;
+	if (dir==N) 
+		dir = S;
+	if (dir==S) 
+		dir = N;
+}
+
 void Persona::teleport() {
+	//this should be improved...
 	teleporting = true;
-	currentSpeed = teleportDist;
+	currentSpeed = stats.teleportDist;
 }
 
