@@ -2,11 +2,13 @@
 
 #include <iostream> //debug
 
+using namespace std;
+
 Player::Player(char img[], Stats s, ControlSet ctrl) : Persona(img, 0, 0, s) {
 	controls = ctrl;
 }
 
-void Player::handleControls(sf::Event event, std::vector<DrawableObj*> &toBeDrawn) {
+void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (event.type == sf::Event::KeyPressed) {
 		//basic movement
@@ -25,7 +27,7 @@ void Player::handleControls(sf::Event event, std::vector<DrawableObj*> &toBeDraw
 
 		// teleport
 		if (event.key.code == controls.ability1) 
-			ability1(toBeDrawn);
+			ability1(toBeDrawn, toBeUpd, playerSide);
 	}
 
 	if(event.type == sf::Event::KeyReleased) {
@@ -42,10 +44,15 @@ void Player::handleControls(sf::Event event, std::vector<DrawableObj*> &toBeDraw
 }
 
 // just to try
-void Player::ability1(std::vector<DrawableObj*> &toBeDrawn) {
+void Player::ability1(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
-	char bulletImg[] = "./img/Mario_Nintendo.png";
-	Bullet *bullet = new Bullet(bulletImg, 100, 100);
+	char bulletImg[] = "./img/small_mario.png";
+	sf::Vector2f position = DrawableObj::sprite->getPosition();
+
+	Bullet *bullet = new Bullet(bulletImg, position.x, position.y, Persona::dir);
+
 	toBeDrawn.push_back(bullet);
-
+	toBeUpd.push_back(bullet);
+	playerSide.push_back(bullet);
+	
 }

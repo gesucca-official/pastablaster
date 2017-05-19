@@ -18,6 +18,7 @@ typedef struct {
 
 typedef struct {
 	float dmg;
+	float weight;
 	int bullets;
 	char bulletImg[MAX_PATH_LEN];
 	float bulletSpeed;

@@ -67,7 +67,7 @@ int main() {
 		Event event;
 		while (window.pollEvent(event)) {
 
-			mario.handleControls(event, toBeDrawn);
+			mario.handleControls(event, toBeDrawn, toBeUpd, playerSide);
 
 			// ESC BUTTON: exit
 			if (event.type == Event::KeyPressed) {
