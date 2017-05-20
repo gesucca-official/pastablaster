@@ -27,6 +27,9 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 		// shot
 		if (event.key.code == controls.ability1) 
 			ability1(toBeDrawn, toBeUpd, playerSide);
+		// shot
+		if (event.key.code == controls.ability2) 
+			ability2(toBeDrawn, toBeUpd, playerSide);
 	}
 
 	if(event.type == sf::Event::KeyReleased) {
@@ -54,5 +57,37 @@ void Player::ability1(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBe
 	toBeDrawn.push_back(bullet);
 	toBeUpd.push_back(bullet);
 	playerSide.push_back(bullet);
+	
+}
+// PIOGGIADIMARIOH
+void Player::ability2(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+
+	char bulletImg[] = "./img/Mario_Nintendo.png";
+	sf::Vector2f position = DrawableObj::sprite->getPosition();
+
+	Bullet *bullet1 = new Bullet(bulletImg, position.x, position.y, N);
+	bullet1->setSpriteScale(0.2f);
+	Bullet *bullet2 = new Bullet(bulletImg, position.x, position.y, S);
+	bullet2->setSpriteScale(0.2f);
+	Bullet *bullet3 = new Bullet(bulletImg, position.x, position.y, E);
+	bullet3->setSpriteScale(0.2f);
+	Bullet *bullet4 = new Bullet(bulletImg, position.x, position.y, W);
+	bullet4->setSpriteScale(0.2f);
+
+	toBeDrawn.push_back(bullet1);
+	toBeUpd.push_back(bullet1);
+	playerSide.push_back(bullet1);
+
+	toBeDrawn.push_back(bullet2);
+	toBeUpd.push_back(bullet2);
+	playerSide.push_back(bullet2);
+
+	toBeDrawn.push_back(bullet3);
+	toBeUpd.push_back(bullet3);
+	playerSide.push_back(bullet3);
+
+	toBeDrawn.push_back(bullet4);
+	toBeUpd.push_back(bullet4);
+	playerSide.push_back(bullet4);
 	
 }

@@ -43,6 +43,7 @@ int main() {
 	marioControls.goDown = Keyboard::S;
 	marioControls.teleport = Keyboard::Space;
 	marioControls.ability1 = Keyboard::M;
+	marioControls.ability2 = Keyboard::N;
 
 	Stats s;
 	s.hp = 100.0;
