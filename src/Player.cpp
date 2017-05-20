@@ -4,6 +4,7 @@ using namespace std;
 
 Player::Player(char img[], Stats s, ControlSet ctrl) : Persona(img, 100, 100, s) {
 	controls = ctrl;
+	DrawableObj::sprite->setScale(0.6f, 0.6f); //just cause texture is too large...
 }
 
 void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
@@ -44,10 +45,11 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 // just to try
 void Player::ability1(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
-	char bulletImg[] = "./img/small_mario.png";
+	char bulletImg[] = "./img/Mario_Nintendo.png";
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
 	Bullet *bullet = new Bullet(bulletImg, position.x, position.y, Persona::dir);
+	bullet->setSpriteScale(0.3f);
 
 	toBeDrawn.push_back(bullet);
 	toBeUpd.push_back(bullet);

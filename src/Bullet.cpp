@@ -9,9 +9,13 @@ Bullet::Bullet(char img[], int posX, int posY, Direction dir) : GameObj(), Drawa
 	//load this info from struct Weapon passed by Player
 	w.dmg = 50.0;
 	w.bullets = 10;
-	w.bulletSpeed = 7.5;
+	w.bulletSpeed = 12.5;
 	w.shootSpeed = 5.0;
 
+}
+
+void Bullet::setSpriteScale(float f) {
+	DrawableObj::sprite->setScale(f, f); 
 }
 
 sf::FloatRect Bullet::getBound() {

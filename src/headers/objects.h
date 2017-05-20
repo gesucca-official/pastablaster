@@ -48,6 +48,7 @@ private:
 	Direction d;
 public:
 	Bullet(char img[], int posX, int posY, Direction dir);
+	void setSpriteScale(float scaleFactor);
 	sf::FloatRect getBound();
 	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);

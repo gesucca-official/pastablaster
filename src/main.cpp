@@ -3,27 +3,28 @@
 #include "headers/engine.h"
 
 using namespace sf;
+using std::vector;
 
-sf::FloatRect fieldBounds;
-std::vector<DrawableObj*> toBeDrawn;
-std::vector<ModeledObj*> toBeUpd;
-std::vector<ModeledObj*> playerSide;
-std::vector<ModeledObj*> oppoSide;
+FloatRect fieldBounds;
+vector<DrawableObj*> toBeDrawn;
+vector<ModeledObj*> toBeUpd;
+vector<ModeledObj*> playerSide;
+vector<ModeledObj*> oppoSide;
 
 int main() {
 
-	// Create the main world (random resolution for now)
-	RenderWindow window(VideoMode(800, 600), "Duel Screen", Style::Fullscreen);
+	/*CREATE WINDOW*/
+	sf::VideoMode vm = sf::VideoMode().getDesktopMode();
+	RenderWindow window(vm, "Duel Screen", Style::Fullscreen);
 	window.setFramerateLimit(60);
 
-	// create a view centered in 0,0, res 800*600
-	View view(FloatRect(0, 0, 800, 600));
-
-	// activate it
+	// view needs to be same pixels of background!!
+	// 'til I find a better way to do it, obviously
+	View view(FloatRect(0, 0, 1366, 768));
 	window.setView(view);
 
 	// stage
-	char stagePath[] = "./img/ground.jpg";
+	char stagePath[] = "./img/bkg.png";
 	char musicPath[] =  "./sng/song.ogg";
 
 	Stage stage(stagePath, musicPath);
@@ -34,7 +35,7 @@ int main() {
 	fieldBounds = stage.getBound();
 
 	// big mario
-	char marioPath[] = "./img/Mario_Nintendo.png";
+	char marioPath[] = "./img/player.png";
 	ControlSet marioControls;
 	marioControls.goRight = Keyboard::D;
 	marioControls.goLeft = Keyboard::A;
@@ -58,7 +59,8 @@ int main() {
 	playerSide.push_back(&mario);
 
 	// a bad guy to test collisions
-	Persona badguy(marioPath, 500, 200, s);
+	char oppoPath[] = "./img/oppo.png";
+	Persona badguy(oppoPath, 500, 200, s);
 	toBeDrawn.push_back(&badguy);
 	toBeUpd.push_back(&badguy);
 	oppoSide.push_back(&badguy);
@@ -76,24 +78,6 @@ int main() {
 			if (event.type == Event::KeyPressed) {
 				if (event.key.code == Keyboard::Escape)
 					window.close();
-
-			// ARROWS: adjust view
-				if (Keyboard::isKeyPressed(Keyboard::Up)) {
-					view.move(0, -2);
-					window.setView(view);
-				}
-				if (Keyboard::isKeyPressed(Keyboard::Down)) {
-					view.move(0, 2);
-					window.setView(view);
-				}
-				if (Keyboard::isKeyPressed(Keyboard::Left)) {
-					view.move(-2, 0);
-					window.setView(view);
-				}
-				if (Keyboard::isKeyPressed(Keyboard::Right)) {
-					view.move(2, 0);
-					window.setView(view);
-				}
 			}
 		}
 
