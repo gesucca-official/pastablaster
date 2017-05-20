@@ -4,6 +4,7 @@
 
 using namespace sf;
 
+sf::FloatRect fieldBounds;
 std::vector<DrawableObj*> toBeDrawn;
 std::vector<ModeledObj*> toBeUpd;
 std::vector<ModeledObj*> playerSide;
@@ -29,6 +30,8 @@ int main() {
 	stage.music.setLoop(true);
 	stage.music.play();
 	toBeDrawn.push_back(&stage);
+
+	fieldBounds = stage.getBound();
 
 	// big mario
 	char marioPath[] = "./img/Mario_Nintendo.png";
@@ -100,11 +103,13 @@ int main() {
 
 		//update and draw
 		for (int i=0; i<toBeUpd.size(); i++)
-			toBeUpd[i]->update();
+			toBeUpd[i]->update(fieldBounds);
 		for (int i=0; i<toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
 		detectCollisions(playerSide, oppoSide);
+		//removeOutOfField(fieldBounds, toBeDrawn, toBeUpd, playerSide, oppoSide);
+
 
 		window.display();
 	}

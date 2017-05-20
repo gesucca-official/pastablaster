@@ -23,14 +23,15 @@ public:
 		window.draw(*sprite);
 	}
 	virtual bool exist() = 0;
+	virtual sf::FloatRect getBound() = 0;
 };
 
 class ModeledObj {
 public:
-	virtual void update() = 0;
+	virtual void update(sf::FloatRect fieldBounds) = 0;
 	virtual void collide(ModeledObj &collided) = 0;
-	virtual sf::FloatRect getBound() = 0;
 	virtual bool exist() = 0;
+	virtual sf::FloatRect getBound() = 0;
 	virtual float getCollisionDmg() = 0;
 	virtual float getWeight() = 0;
 };

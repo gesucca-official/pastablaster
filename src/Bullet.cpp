@@ -18,7 +18,7 @@ sf::FloatRect Bullet::getBound() {
 	return sprite->getGlobalBounds();
 }
 
-void Bullet::update() {
+void Bullet::update(sf::FloatRect fieldBounds) {
 	if (d==E)
 		sprite->move(w.bulletSpeed, 0);
 	if (d==W) 
@@ -27,6 +27,9 @@ void Bullet::update() {
 		sprite->move(0, -w.bulletSpeed);
 	if (d==S) 
 		sprite->move(0, w.bulletSpeed);
+
+	if (!fieldBounds.intersects(getBound()))
+		GameObj::exist = false;
 }
 
 void Bullet::collide(ModeledObj &collided) {

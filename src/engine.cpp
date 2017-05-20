@@ -30,3 +30,24 @@ void detectCollisions(vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppo
 		}
 	}
 }
+
+void removeOutOfField(sf::FloatRect bound, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppoSide) {
+	
+	for (int i=0; i<toBeDrawn.size(); i++) {
+		if (!toBeDrawn[i]->getBound().intersects(bound))
+			toBeDrawn.erase(std::remove(toBeDrawn.begin(), toBeDrawn.end(), toBeDrawn[i]), toBeDrawn.end());
+	}
+	for (int i=0; i<toBeUpd.size(); i++) {
+		if (!toBeUpd[i]->getBound().intersects(bound))
+			toBeUpd.erase(std::remove(toBeUpd.begin(), toBeUpd.end(), toBeUpd[i]), toBeUpd.end());
+	}
+	for (int i=0; i<playerSide.size(); i++) {
+		if (!playerSide[i]->getBound().intersects(bound))
+			playerSide.erase(std::remove(playerSide.begin(), playerSide.end(), playerSide[i]), playerSide.end());
+	}
+	for (int i=0; i<oppoSide.size(); i++) {
+		if (!oppoSide[i]->getBound().intersects(bound))
+			oppoSide.erase(std::remove(oppoSide.begin(), oppoSide.end(), oppoSide[i]), oppoSide.end());
+	}
+
+}

@@ -12,6 +12,9 @@ public:
 	inline bool exist() {
 		return true;
 	}
+	inline sf::FloatRect getBound() {
+		return sprite->getLocalBounds();
+	}
 };
 
 class Persona: public GameObj, public DrawableObj, public ModeledObj {
@@ -28,7 +31,7 @@ protected:
 public:
 	Persona(char img[], int posX, int posY, Stats s);
 	sf::FloatRect getBound();
-	void update();
+	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
 	bool exist();
 	float getCollisionDmg();
@@ -46,7 +49,7 @@ private:
 public:
 	Bullet(char img[], int posX, int posY, Direction dir);
 	sf::FloatRect getBound();
-	void update();
+	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
 	bool exist();
 	float getCollisionDmg();

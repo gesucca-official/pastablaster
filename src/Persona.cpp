@@ -11,7 +11,7 @@ Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableO
 	sprite->move(posX, posY);
 }
 
-void Persona::update() {
+void Persona::update(sf::FloatRect fieldBounds) {
 	if (currentSpeed<stats.weigth)
 		bouncing = false;
 
@@ -36,6 +36,9 @@ void Persona::update() {
 		sprite->move(0, -currentSpeed);
 	if (dir==S) 
 		sprite->move(0, currentSpeed);
+
+	if (!fieldBounds.intersects(getBound()))
+		bouncing = true;
 
 	if (running) {
 		currentSpeed+=stats.accel;
