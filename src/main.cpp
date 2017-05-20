@@ -108,48 +108,9 @@ int main() {
 			toBeDrawn[i]->draw(window);
 
 		detectCollisions(playerSide, oppoSide);
-		//removeOutOfField(fieldBounds, toBeDrawn, toBeUpd, playerSide, oppoSide);
-
 
 		window.display();
 	}
 
 	return EXIT_SUCCESS;
 }
-
-/*
-class Mario {
-public:
-   void Jump();
-   void Draw(RenderWindow &Window);
-   void Update();
-private:
-   sf::Sprite Sprite;
-   bool IsJumping;
-};
-
-void Mario::Jump() {
-   IsJumping = true;
-}
-
-void Mario::Update() {
-   if(IsJumping) {
-      same jumping logic as above
-   }
-   
-   some more updating logic
-}
-*/
-
-/*
-int main()
-{
-    vector<string> list;
-    list.push_back("foo");
-    list.push_back("bar");
-    for( vector<string>::const_iterator it = list.begin(); it != list.end(); ++it )
-        cout << *it << endl;
-
-    return 0;
-}
-*/

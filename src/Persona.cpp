@@ -2,18 +2,24 @@
 
 Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableObj(img){
 	stats = s;
-	
+
 	running = false;
 	teleporting = false;
 	bouncing = false;
 
 	//default position
 	sprite->move(posX, posY);
+		currentSpeed = 0.0;
 }
 
 void Persona::update(sf::FloatRect fieldBounds) {
+	
+	/* BOUNCING LOGIC */
 	if (currentSpeed<stats.weigth)
 		bouncing = false;
+
+	if (!fieldBounds.intersects(getBound()))
+		bouncing = true;
 
 	if (bouncing) {
 		if (dir==E)
@@ -28,6 +34,7 @@ void Persona::update(sf::FloatRect fieldBounds) {
 		return;
 	}
 
+	/*MOVEMENT BASED ON SPEED*/
 	if (dir==E)
 		sprite->move(currentSpeed, 0);
 	if (dir==W) 
@@ -37,9 +44,7 @@ void Persona::update(sf::FloatRect fieldBounds) {
 	if (dir==S) 
 		sprite->move(0, currentSpeed);
 
-	if (!fieldBounds.intersects(getBound()))
-		bouncing = true;
-
+	/*ACTION PHYSICS*/
 	if (running) {
 		currentSpeed+=stats.accel;
 		// speed cap
@@ -95,18 +100,6 @@ void Persona::run(Direction d) {
 
 void Persona::stop() {
 	running = false;
-}
-
-//I made this, but... why?
-void Persona::turnBack() {
-	if (dir==E)
-		dir=W;
-	if (dir==W) 
-		dir=E;
-	if (dir==N) 
-		dir = S;
-	if (dir==S) 
-		dir = N;
 }
 
 void Persona::teleport() {

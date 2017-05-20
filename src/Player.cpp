@@ -1,10 +1,8 @@
 #include "headers/characters.h"
 
-#include <iostream> //debug
-
 using namespace std;
 
-Player::Player(char img[], Stats s, ControlSet ctrl) : Persona(img, 0, 0, s) {
+Player::Player(char img[], Stats s, ControlSet ctrl) : Persona(img, 100, 100, s) {
 	controls = ctrl;
 }
 
@@ -25,7 +23,7 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 		if (event.key.code == controls.teleport) 
 			teleport();
 
-		// teleport
+		// shot
 		if (event.key.code == controls.ability1) 
 			ability1(toBeDrawn, toBeUpd, playerSide);
 	}
