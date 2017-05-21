@@ -4,14 +4,23 @@ Bullet::Bullet(char img[], int posX, int posY, Direction dir) : GameObj(), Drawa
 	//default position
 	sprite->move(posX, posY);
 
+	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
+
 	d = dir;
+
+	// texture is drawn UP, so...
+	if (d==E)
+		sprite->rotate(90);
+	if (d==W) 
+		sprite->rotate(-90);
+	if (d==S) 
+		sprite->rotate(180);
 
 	//load this info from struct Weapon passed by Player
 	w.dmg = 50.0;
 	w.bullets = 10;
 	w.bulletSpeed = 12.5;
 	w.shootSpeed = 5.0;
-
 }
 
 void Bullet::setSpriteScale(float f) {

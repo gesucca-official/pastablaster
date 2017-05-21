@@ -66,6 +66,11 @@ int main() {
 	toBeUpd.push_back(&badguy);
 	oppoSide.push_back(&badguy);
 
+	//LIFEBAR
+	sf::RectangleShape playerLifeBar(sf::Vector2f(200, 40));
+	playerLifeBar.setPosition(20, 15);
+	playerLifeBar.setFillColor(sf::Color::Cyan);
+
 	// Start the game loop
 	while (window.isOpen()) {
 
@@ -82,6 +87,8 @@ int main() {
 			}
 		}
 
+
+
 		window.clear();
 
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
@@ -93,6 +100,9 @@ int main() {
 			toBeDrawn[i]->draw(window);
 
 		detectCollisions(playerSide, oppoSide);
+
+		//out of the vectors? is a good idea?
+		window.draw(playerLifeBar);
 
 		window.display();
 	}

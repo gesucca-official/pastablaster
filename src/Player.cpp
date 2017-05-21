@@ -24,12 +24,11 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 		if (event.key.code == controls.teleport) 
 			teleport();
 
-		// shot
+		// abilities
 		if (event.key.code == controls.ability1) 
-			ability1(toBeDrawn, toBeUpd, playerSide);
-		// shot
+			bigShotAhead(toBeDrawn, toBeUpd, playerSide);
 		if (event.key.code == controls.ability2) 
-			ability2(toBeDrawn, toBeUpd, playerSide);
+			smallShotAround(toBeDrawn, toBeUpd, playerSide);
 	}
 
 	if(event.type == sf::Event::KeyReleased) {
@@ -46,7 +45,7 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 }
 
 // just to try
-void Player::ability1(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	char bulletImg[] = "./img/Mario_Nintendo.png";
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
@@ -59,8 +58,9 @@ void Player::ability1(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBe
 	playerSide.push_back(bullet);
 	
 }
+
 // PIOGGIADIMARIOH
-void Player::ability2(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	char bulletImg[] = "./img/Mario_Nintendo.png";
 	sf::Vector2f position = DrawableObj::sprite->getPosition();

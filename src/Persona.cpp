@@ -8,8 +8,9 @@ Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableO
 	bouncing = false;
 
 	//default position
+	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
 	sprite->move(posX, posY);
-		currentSpeed = 0.0;
+	currentSpeed = 0.0;
 }
 
 void Persona::update(sf::FloatRect fieldBounds) {
