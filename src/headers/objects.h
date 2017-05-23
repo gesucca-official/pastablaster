@@ -31,6 +31,7 @@ protected:
 public:
 	Persona(char img[], int posX, int posY, Stats s);
 	sf::FloatRect getBound();
+	inline float getHp() {return stats.hp;}
 	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
 	bool exist();
@@ -44,10 +45,10 @@ public:
 
 class Bullet : public GameObj, public DrawableObj, public ModeledObj {
 private:
-	Weapon w;
+	Ability w;
 	Direction d;
 public:
-	Bullet(char img[], int posX, int posY, Direction dir);
+	Bullet(char img[], int posX, int posY, Direction dir, Ability a);
 	void setSpriteScale(float scaleFactor);
 	sf::FloatRect getBound();
 	void update(sf::FloatRect fieldBounds);

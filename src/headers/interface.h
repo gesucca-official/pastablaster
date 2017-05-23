@@ -18,30 +18,32 @@ typedef struct {
 
 typedef struct {
 	float dmg;
-	float weight;
-	int bullets;
-	char bulletImg[MAX_PATH_LEN];
+	float bulletWeight;
 	float bulletSpeed;
 	float shootSpeed;
-} Weapon;
+	float manaCost;
+	char bulletImg[MAX_PATH_LEN];
+	
+} Ability;
 
 typedef struct {
-	Weapon w1;
-	Weapon w2;
-	Weapon w3;
-	Weapon w4;
-} WeaponSet;
+	Ability a1;
+	Ability a2;
+	Ability a3;
+	Ability a4;
+} AbilitySet;
 
 typedef struct {
 	float hp;
+	float maxHp;
+	float mp;
+	float maxMp;
+	float manaRegen;
 	float weigth;
-
 	float collisionDmg;
-	WeaponSet ws;
-	
+	AbilitySet ws;
 	float maxSpeed;
 	float accel;
 	float decel;
-	
 	float teleportDist;
 } Stats;

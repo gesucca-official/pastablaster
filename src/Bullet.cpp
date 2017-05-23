@@ -1,12 +1,13 @@
 #include "headers/objects.h"
 
-Bullet::Bullet(char img[], int posX, int posY, Direction dir) : GameObj(), DrawableObj(img), ModeledObj() {
+Bullet::Bullet(char img[], int posX, int posY, Direction dir, Ability a) : GameObj(), DrawableObj(img), ModeledObj() {
 	//default position
 	sprite->move(posX, posY);
 
 	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
 
 	d = dir;
+	w = a;
 
 	// texture is drawn UP, so...
 	if (d==E)
@@ -15,12 +16,6 @@ Bullet::Bullet(char img[], int posX, int posY, Direction dir) : GameObj(), Drawa
 		sprite->rotate(-90);
 	if (d==S) 
 		sprite->rotate(180);
-
-	//load this info from struct Weapon passed by Player
-	w.dmg = 50.0;
-	w.bullets = 10;
-	w.bulletSpeed = 12.5;
-	w.shootSpeed = 5.0;
 }
 
 void Bullet::setSpriteScale(float f) {
@@ -53,4 +48,4 @@ bool Bullet::exist() {return GameObj::exist;}
 
 float Bullet::getCollisionDmg() {return w.dmg;}
 
-float Bullet::getWeight() {return w.weight;}
+float Bullet::getWeight() {return w.bulletWeight;}

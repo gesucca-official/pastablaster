@@ -1,5 +1,7 @@
 #include <SFML/Audio.hpp>
 
+#include <string.h>
+
 #include "headers/engine.h"
 
 using namespace sf;
@@ -47,6 +49,8 @@ int main() {
 
 	Stats s;
 	s.hp = 100.0;
+	s.mp = 100;
+	s.manaRegen = 0.5f;
 	s.weigth = 2.0;
 	s.collisionDmg = 25.0;
 	s.maxSpeed=8.0;
@@ -54,7 +58,19 @@ int main() {
 	s.decel = 1.0;
 	s.teleportDist=100.0;
 
-	Player mario(marioPath, s, marioControls);
+	Ability n;
+	n.dmg=30,0;
+	n.bulletWeight = 20;
+	n.bulletSpeed= 5;
+	n.shootSpeed=20;
+	n.manaCost=10;
+	strcpy( n.bulletImg, "./img/Mario_Nintendo.png" );
+
+	AbilitySet as;
+	as.a1 = n;
+	as.a2 = n;
+
+	Player mario(marioPath, s, marioControls, as);
 	toBeDrawn.push_back(&mario);
 	toBeUpd.push_back(&mario);
 	playerSide.push_back(&mario);

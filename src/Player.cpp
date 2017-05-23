@@ -2,12 +2,19 @@
 
 using namespace std;
 
-Player::Player(char img[], Stats s, ControlSet ctrl) : Persona(img, 100, 100, s) {
+Player::Player(char img[], Stats s, ControlSet ctrl, AbilitySet a) : Persona(img, 100, 100, s) {
 	controls = ctrl;
+	abilities = a;
+
 	DrawableObj::sprite->setScale(0.6f, 0.6f); //just cause texture is too large...
 }
 
 void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+
+	//mana regen done here, this run in the game loop
+	if (stats.mp < stats.maxMp)
+		stats.mp += (float) stats.manaRegen;
+	//it dows not work, maybe a charge type like dragonball?
 
 	if (event.type == sf::Event::KeyPressed) {
 		//basic movement
@@ -44,34 +51,36 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 	}
 }
 
-// just to try
 void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
-	char bulletImg[] = "./img/Mario_Nintendo.png";
+	if (stats.mp < abilities.a1.manaCost)
+		return;
+
+	stats.mp -= abilities.a1.manaCost;
+
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet = new Bullet(bulletImg, position.x, position.y, Persona::dir);
+	Bullet *bullet = new Bullet(abilities.a1.bulletImg, position.x, position.y, dir, abilities.a1);
 	bullet->setSpriteScale(0.3f);
 
 	toBeDrawn.push_back(bullet);
 	toBeUpd.push_back(bullet);
 	playerSide.push_back(bullet);
-	
 }
 
-// PIOGGIADIMARIOH
+// PIOGGIADIMARIOH to be done
 void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	char bulletImg[] = "./img/Mario_Nintendo.png";
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet1 = new Bullet(bulletImg, position.x, position.y, N);
+	Bullet *bullet1 = new Bullet(bulletImg, position.x, position.y, N, abilities.a1);
 	bullet1->setSpriteScale(0.2f);
-	Bullet *bullet2 = new Bullet(bulletImg, position.x, position.y, S);
+	Bullet *bullet2 = new Bullet(bulletImg, position.x, position.y, S, abilities.a1);
 	bullet2->setSpriteScale(0.2f);
-	Bullet *bullet3 = new Bullet(bulletImg, position.x, position.y, E);
+	Bullet *bullet3 = new Bullet(bulletImg, position.x, position.y, E, abilities.a1);
 	bullet3->setSpriteScale(0.2f);
-	Bullet *bullet4 = new Bullet(bulletImg, position.x, position.y, W);
+	Bullet *bullet4 = new Bullet(bulletImg, position.x, position.y, W, abilities.a1);
 	bullet4->setSpriteScale(0.2f);
 
 	toBeDrawn.push_back(bullet1);
