@@ -1,5 +1,12 @@
 #include <SFML/Graphics.hpp>
 
+typedef enum {
+	N,
+	S,
+	E,
+	W
+} Direction;
+
 class GameObj {
 public:
 	inline GameObj() {
@@ -30,15 +37,10 @@ class ModeledObj {
 public:
 	virtual void update(sf::FloatRect fieldBounds) = 0;
 	virtual void collide(ModeledObj &collided) = 0;
+	virtual Direction getDirection() = 0;
 	virtual bool exist() = 0;
 	virtual sf::FloatRect getBound() = 0;
 	virtual float getCollisionDmg() = 0;
 	virtual float getWeight() = 0;
 };
 
-typedef enum {
-	N,
-	S,
-	E,
-	W
-} Direction;

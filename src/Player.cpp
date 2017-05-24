@@ -9,12 +9,15 @@ Player::Player(char img[], Stats s, ControlSet ctrl, AbilitySet a) : Persona(img
 	DrawableObj::sprite->setScale(0.6f, 0.6f); //just cause texture is too large...
 }
 
-void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+void Player::update(sf::FloatRect fieldBounds) {
+	Persona::update(fieldBounds);
 
-	//mana regen done here, this run in the game loop
+	//mana regen
 	if (stats.mp < stats.maxMp)
 		stats.mp += (float) stats.manaRegen;
-	//it dows not work, maybe a charge type like dragonball?
+}
+
+void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (event.type == sf::Event::KeyPressed) {
 		//basic movement
@@ -60,7 +63,7 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet = new Bullet(abilities.a1.bulletImg, position.x, position.y, dir, abilities.a1);
+	Bullet *bullet = new Bullet(abilities.a1.bulletImg, abilities.a1.bulletExplImg, position.x, position.y, dir, abilities.a1);
 	bullet->setSpriteScale(0.3f);
 
 	toBeDrawn.push_back(bullet);
@@ -71,6 +74,7 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 // PIOGGIADIMARIOH to be done
 void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
+/*
 	char bulletImg[] = "./img/Mario_Nintendo.png";
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
@@ -98,5 +102,5 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 	toBeDrawn.push_back(bullet4);
 	toBeUpd.push_back(bullet4);
 	playerSide.push_back(bullet4);
-	
+	*/
 }

@@ -1,10 +1,15 @@
 #include "headers/objects.h"
 
-Bullet::Bullet(char img[], int posX, int posY, Direction dir, Ability a) : GameObj(), DrawableObj(img), ModeledObj() {
+Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a) : GameObj(), DrawableObj(img), ModeledObj() {
+	exploding = false;
+	explTime = 0;
+
 	//default position
 	sprite->move(posX, posY);
-
 	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
+
+	explTexture.loadFromFile(explImg);
+	explTexture.setSmooth(true);
 
 	d = dir;
 	w = a;
@@ -27,6 +32,15 @@ sf::FloatRect Bullet::getBound() {
 }
 
 void Bullet::update(sf::FloatRect fieldBounds) {
+
+	if (exploding) {
+		w.dmg = w.dmg/2; // if you remain or return on the explosion. you lose life!
+		explTime++;
+		if (explTime==w.explFrames)
+			GameObj::exist = false;
+		return;
+	}
+
 	if (d==E)
 		sprite->move(w.bulletSpeed, 0);
 	if (d==W) 
@@ -41,11 +55,13 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 }
 
 void Bullet::collide(ModeledObj &collided) {
-	GameObj::exist = false;
+	exploding = true;
+
+	sprite->setTexture(explTexture, true);
 }
 
-bool Bullet::exist() {return GameObj::exist;}
+inline bool Bullet::exist() {return GameObj::exist;}
 
-float Bullet::getCollisionDmg() {return w.dmg;}
+inline float Bullet::getCollisionDmg() {return w.dmg;}
 
-float Bullet::getWeight() {return w.bulletWeight;}
+inline float Bullet::getWeight() {return w.bulletWeight;}

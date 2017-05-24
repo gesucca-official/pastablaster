@@ -23,7 +23,8 @@ typedef struct {
 	float shootSpeed;
 	float manaCost;
 	char bulletImg[MAX_PATH_LEN];
-	
+	char bulletExplImg[MAX_PATH_LEN];
+	int explFrames;
 } Ability;
 
 typedef struct {
@@ -41,9 +42,9 @@ typedef struct {
 	float manaRegen;
 	float weigth;
 	float collisionDmg;
-	AbilitySet ws;
 	float maxSpeed;
 	float accel;
 	float decel;
 	float teleportDist;
+	AbilitySet ws;
 } Stats;

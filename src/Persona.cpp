@@ -67,7 +67,18 @@ void Persona::collide(ModeledObj &collided) {
 
 	stats.hp-=collided.getCollisionDmg();
 
-	//why here?
+	//face the collision
+	// THIS TRIGGERS A FUNNY BUG
+	if (collided.getDirection()==E)
+		dir = W;
+	if (collided.getDirection()==W) 
+		dir = E;
+	if (collided.getDirection()==N) 
+		dir = S;
+	if (collided.getDirection()==S) 
+		dir = N;
+
+	//why here? this needs to be checked somewhere else
 	if (stats.hp<=0.0)
 		GameObj::exist = false;
 
