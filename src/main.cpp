@@ -1,23 +1,4 @@
-#include <string.h>
-
-#include "headers/engine.h"
-
-using namespace sf;
-using std::vector;
-
-Stage* stage;
-Player* player;
-Persona* opponent;
-
-Shape* playerLifeBar;
-Shape* oppoLifeBar;
-
-Shape* playerManaBar;
-
-vector<DrawableObj*> toBeDrawn;
-vector<ModeledObj*> toBeUpd;
-vector<ModeledObj*> playerSide;
-vector<ModeledObj*> oppoSide;
+#include "headers/main.h"
 
 Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
@@ -106,6 +87,54 @@ Persona* initOpponent() {
 	return opponent;
 }
 
+void initOverScreen() {
+	playerLifeBar = new RectangleShape(sf::Vector2f(400, 30));
+	playerLifeBar->setPosition(20, 15);
+	playerLifeBar->setFillColor(LIFE_GOOD);
+	playerManaBar = new RectangleShape(sf::Vector2f(350, 25));
+	playerManaBar->setPosition(20, 45);
+	playerManaBar->setFillColor(MANA);
+
+	oppoLifeBar = new RectangleShape(sf::Vector2f(500, 42.5));
+	oppoLifeBar->setOrigin(500, 0);
+	oppoLifeBar->setPosition(1346, 15);
+	oppoLifeBar->setFillColor(OPPO_LIFE);
+
+	font = new Font();
+	font->loadFromFile("./fnt/ancherr.ttf");
+
+	Text *plName = new Text();
+
+	plName->setFont(*font);
+	plName->setString("LITTLE POOR FUSILLOH");
+	plName->setCharacterSize(36); 
+	plName->setPosition(40,0);
+
+	Text *oppoName = new Text();
+
+	oppoName->setFont(*font);
+	oppoName->setString("BIG BAD PIPA RIGATAH");
+	oppoName->setCharacterSize(36);
+	oppoName->setPosition(1000,0);
+	
+	text.push_back(plName);
+	text.push_back(oppoName);
+}
+
+void overScreenLogic() {
+	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
+	playerLifeBar->setScale(pLifePercent, 1.0);
+	if (pLifePercent<0.55)
+		playerLifeBar->setFillColor(LIFE_MMM);
+	if (pLifePercent<0.26)
+		playerLifeBar->setFillColor(LIFE_BAD);
+
+	float pManaPercent = (float) player->getMp() / (float) player->getMaxMp();
+	playerManaBar->setScale(pManaPercent, 1.0);
+	float oLifePercent = (float) opponent->getHp() / (float) opponent->getMaxHp();
+	oppoLifeBar->setScale(oLifePercent, 1.0);
+}
+
 int main() {
 
 	sf::VideoMode vm = sf::VideoMode().getDesktopMode();
@@ -121,29 +150,13 @@ int main() {
 	player = initPlayer();
 	opponent = initOpponent();
 
-	//needs some embellishments
-	playerLifeBar = new RectangleShape(sf::Vector2f(400, 30));
-	playerLifeBar->setPosition(20, 15);
-	playerLifeBar->setFillColor(sf::Color::Green);
-	playerManaBar = new RectangleShape(sf::Vector2f(350, 25));
-	playerManaBar->setPosition(20, 45);
-	playerManaBar->setFillColor(sf::Color::Blue);
-
-	oppoLifeBar = new RectangleShape(sf::Vector2f(450, 30));
-	oppoLifeBar->setOrigin(450, 0);
-	oppoLifeBar->setPosition(1346, 15);
-	oppoLifeBar->setFillColor(sf::Color::Green);
+	initOverScreen();
 
 	// Start the game loop
 	while (window.isOpen()) {
 
 		// life and mana display logic
-		float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
-		playerLifeBar->setScale(pLifePercent, 1.0);
-		float pManaPercent = (float) player->getMp() / (float) player->getMaxMp();
-		playerManaBar->setScale(pManaPercent, 1.0);
-		float oLifePercent = (float) opponent->getHp() / (float) opponent->getMaxHp();
-		oppoLifeBar->setScale(oLifePercent, 1.0);
+		overScreenLogic();
 
 		// Process events
 		Event event;
@@ -174,6 +187,8 @@ int main() {
 		window.draw(*playerLifeBar);
 		window.draw(*playerManaBar);
 		window.draw(*oppoLifeBar);
+		for (int i=0; i<text.size(); i++)
+			window.draw(*text[i]);
 
 		window.display();
 	}
