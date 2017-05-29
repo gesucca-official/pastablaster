@@ -27,25 +27,27 @@ private:
 
 protected:
 	Stats stats;
+	Direction preUpdateDir;
 	Direction dir; //implement direction drawings on drawableobj level?
 
 public:
-	Persona(char img[], int posX, int posY, Stats s);
-	sf::FloatRect getBound();
 	inline float getHp() {return stats.hp;}
 	inline float getMaxHp() {return stats.maxHp;}
 	inline float getMp() {return stats.mp;}
 	inline float getMaxMp() {return stats.maxMp;}
+	inline Direction getDirection() {return preUpdateDir;}
+
+	Persona(char img[], int posX, int posY, Stats s);
+	sf::FloatRect getBound();
 	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
-	inline Direction getDirection() {return dir;}
-	bool exist();
-	float getCollisionDmg();
-	float getWeight();
 	void run(Direction d);
 	void stop();
 	void turnBack();
 	void teleport();
+	bool exist();
+	float getCollisionDmg();
+	float getWeight();
 };
 
 class Bullet : public GameObj, public DrawableObj, public ModeledObj {
@@ -57,12 +59,13 @@ private:
 	int explTime;
 	sf::Texture explTexture;
 public:
+	inline Direction getDirection() {return d;}
+
 	Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a);
 	void setSpriteScale(float scaleFactor);
-	sf::FloatRect getBound();
 	void update(sf::FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
-	inline Direction getDirection() {return d;}
+	sf::FloatRect getBound();
 	bool exist();
 	float getCollisionDmg();
 	float getWeight();

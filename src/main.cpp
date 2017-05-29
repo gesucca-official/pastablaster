@@ -173,15 +173,14 @@ int main() {
 
 		window.clear();
 
+		detectCollisions(playerSide, oppoSide);
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
-		//update and draw
+		//update and draw game object
 		for (int i=0; i<toBeUpd.size(); i++)
 			toBeUpd[i]->update(stage->getBound());
 		for (int i=0; i<toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
-
-		detectCollisions(playerSide, oppoSide);
 
 		//draw non game objects here
 		window.draw(*playerLifeBar);

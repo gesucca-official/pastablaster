@@ -11,9 +11,16 @@ Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableO
 	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
 	sprite->move(posX, posY);
 	currentSpeed = 0.0;
+
+	//just to not leave it blanck
+	dir = E;
+	preUpdateDir = E;
 }
 
 void Persona::update(sf::FloatRect fieldBounds) {
+
+	// allineate direction now that collision is done
+	preUpdateDir = dir;
 	
 	/* BOUNCING LOGIC */
 	if (currentSpeed<stats.weigth)
@@ -64,7 +71,6 @@ void Persona::update(sf::FloatRect fieldBounds) {
 }
 
 void Persona::collide(ModeledObj &collided) {
-
 	stats.hp-=collided.getCollisionDmg();
 
 	//face the collision
@@ -108,6 +114,7 @@ bool Persona::exist() {
 void Persona::run(Direction d) {
 	running = true;
 	dir = d;
+	preUpdateDir = d;
 }
 
 void Persona::stop() {
