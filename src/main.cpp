@@ -1,6 +1,6 @@
 #include "headers/main.h"
 
-Stage* initStage() {
+static Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
 	char musicPath[] =  "./sng/song.ogg";
 
@@ -15,7 +15,7 @@ Stage* initStage() {
 	return stage;
 }
 
-Player* initPlayer() {
+static Player* initPlayer() {
 	char marioPath[] = "./img/player.png";
 
 	ControlSet marioControls;
@@ -34,7 +34,7 @@ Player* initPlayer() {
 	s.maxMp = 100.0;
 	s.manaRegen = 0.18f;
 	s.weigth = 2.0;
-	s.collisionDmg = 25.0;
+	s.collisionDmg = 0.3;
 	s.maxSpeed=8.0;
 	s.accel= 1.0;
 	s.decel = 1.0;
@@ -62,7 +62,7 @@ Player* initPlayer() {
 	return player;
 }
 
-Persona* initOpponent() {
+static Persona* initOpponent() {
 
 	char oppoPath[] = "./img/oppo.png";
 
@@ -73,7 +73,7 @@ Persona* initOpponent() {
 	s.maxMp = 100.0;
 	s.manaRegen = 0.5f;
 	s.weigth = 2.0;
-	s.collisionDmg = 25.0;
+	s.collisionDmg = 0.5;
 	s.maxSpeed=8.0;
 	s.accel= 1.0;
 	s.decel = 1.0;
@@ -87,17 +87,40 @@ Persona* initOpponent() {
 	return opponent;
 }
 
-void initOverScreen() {
-	playerLifeBar = new RectangleShape(sf::Vector2f(400, 30));
-	playerLifeBar->setPosition(20, 15);
+static void initOverScreen() {
+
+	Shape* lc = new RectangleShape(Vector2f(pLifeX, pLifeY));
+	lc-> setPosition(pLifePosX, pLifePosY);
+	lc-> setFillColor(BARS_FILL);
+	lc-> setOutlineColor (BARS_CONTOUR);
+	lc-> setOutlineThickness (contourThickness);
+	contours.push_back(lc);
+
+	Shape* mc = new RectangleShape(Vector2f(pManaX, pManaY));
+	mc-> setPosition(pManaPosX, pManaPosY);
+	mc-> setFillColor(BARS_FILL);
+	mc-> setOutlineColor (BARS_CONTOUR);
+	mc-> setOutlineThickness (contourThickness);
+	contours.push_back(mc);
+
+	Shape* oc = new RectangleShape(Vector2f(oX, oY));
+	oc-> setPosition(oPosX, oPosY);
+	oc->setOrigin(oX, 0.0f);
+	oc-> setFillColor(BARS_FILL);
+	oc-> setOutlineColor (BARS_CONTOUR);
+	oc-> setOutlineThickness (contourThickness);
+	contours.push_back(oc);
+
+	playerLifeBar = new RectangleShape(Vector2f(pLifeX, pLifeY));
+	playerLifeBar->setPosition(pLifePosX, pLifePosY);
 	playerLifeBar->setFillColor(LIFE_GOOD);
-	playerManaBar = new RectangleShape(sf::Vector2f(350, 25));
-	playerManaBar->setPosition(20, 45);
+	playerManaBar = new RectangleShape(Vector2f(pManaX, pManaY));
+	playerManaBar->setPosition(pManaPosX, pManaPosY);
 	playerManaBar->setFillColor(MANA);
 
-	oppoLifeBar = new RectangleShape(sf::Vector2f(500, 42.5));
-	oppoLifeBar->setOrigin(500, 0);
-	oppoLifeBar->setPosition(1346, 15);
+	oppoLifeBar = new RectangleShape(Vector2f(oX, oY));
+	oppoLifeBar->setOrigin(oX, 0.0f);
+	oppoLifeBar->setPosition(oPosX, oPosY);
 	oppoLifeBar->setFillColor(OPPO_LIFE);
 
 	font = new Font();
@@ -121,7 +144,7 @@ void initOverScreen() {
 	text.push_back(oppoName);
 }
 
-void overScreenLogic() {
+static void overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
 	playerLifeBar->setScale(pLifePercent, 1.0);
 	if (pLifePercent<0.55)
@@ -186,6 +209,8 @@ int main() {
 		window.draw(*playerLifeBar);
 		window.draw(*playerManaBar);
 		window.draw(*oppoLifeBar);
+		for (int i=0; i<contours.size(); i++)
+			window.draw(*contours[i]);
 		for (int i=0; i<text.size(); i++)
 			window.draw(*text[i]);
 
