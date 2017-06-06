@@ -34,7 +34,7 @@ sf::FloatRect Bullet::getBound() {
 void Bullet::update(sf::FloatRect fieldBounds) {
 
 	if (exploding) {
-		w.dmg = w.dmg/2; // if you remain or return on the explosion. you lose life!
+		w.dmg = w.dmg / w.explDecay; // if you remain or return on the explosion. you lose life!
 		explTime++;
 		if (explTime==w.explFrames)
 			GameObj::exist = false;
@@ -58,6 +58,7 @@ void Bullet::collide(ModeledObj &collided) {
 	exploding = true;
 
 	sprite->setTexture(explTexture, true);
+	sprite->setScale(explScale, explScale);
 }
 
 inline bool Bullet::exist() {return GameObj::exist;}

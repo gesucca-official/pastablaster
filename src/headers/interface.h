@@ -25,6 +25,7 @@ typedef struct {
 	char bulletImg[MAX_PATH_LEN];
 	char bulletExplImg[MAX_PATH_LEN];
 	int explFrames;
+	int explDecay;
 } Ability;
 
 typedef struct {

@@ -4,7 +4,7 @@ static Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
 	char musicPath[] =  "./sng/song.ogg";
 
-	Stage *stage = new Stage(stagePath, musicPath);
+	Stage *stage = new Stage(stagePath, WINDOW_SIZE_X, musicPath);
 
 	stage->music->setLoop(true);
 	stage->music->play();
@@ -24,8 +24,10 @@ static Player* initPlayer() {
 	marioControls.goUp = Keyboard::W;
 	marioControls.goDown = Keyboard::S;
 	marioControls.teleport = Keyboard::Space;
-	marioControls.ability1 = Keyboard::M;
-	marioControls.ability2 = Keyboard::N;
+	marioControls.ability1 = Keyboard::J;
+	marioControls.ability2 = Keyboard::K;
+	marioControls.ability3 = Keyboard::M;
+	marioControls.ability4 = Keyboard::N;
 
 	Stats s;
 	s.hp = 100.0;
@@ -41,14 +43,15 @@ static Player* initPlayer() {
 	s.teleportDist=150.0;
 
 	Ability n;
-	n.dmg=30.0;
-	n.bulletWeight = 20;
+	n.dmg=10.0;
+	n.bulletWeight = 10;
 	n.bulletSpeed= 5;
 	n.shootSpeed=20;
 	n.manaCost=10;
-	strcpy( n.bulletImg, "./img/Mario_Nintendo.png" );
-	strcpy(n.bulletExplImg, "./img/starburst-explosion.png");
-	n.explFrames = 30;
+	strcpy( n.bulletImg, "./img/player.png" );
+	strcpy(n.bulletExplImg, "./img/bang.png");
+	n.explFrames = 35;
+	n.explDecay = 7;
 
 	AbilitySet as;
 	as.a1 = n;
@@ -166,7 +169,7 @@ int main() {
 
 	// view needs to be same pixels of background!!
 	// 'til I find a better way to do it, obviously
-	View view(FloatRect(0, 0, 1366, 768));
+	View view(FloatRect(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y));
 	window.setView(view);
 
 	stage = initStage();

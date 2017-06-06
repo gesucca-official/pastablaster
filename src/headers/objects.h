@@ -6,7 +6,10 @@
 class Stage: public DrawableObj {
 public:
 	sf::Music* music;
-	inline Stage(char img[], char m[]) : DrawableObj(img) {
+	Stage(char img[], int screenWidth, char m[]) : DrawableObj(img) {
+		int ratio = screenWidth / (sprite->getTexture()->getSize().x);
+		sprite->setScale(ratio, ratio);
+
 		music = new sf::Music();
 		music->openFromFile(m);
 	}
@@ -14,7 +17,7 @@ public:
 		return true;
 	}
 	inline sf::FloatRect getBound() {
-		return sprite->getLocalBounds();
+		return sprite->getGlobalBounds();
 	}
 };
 
@@ -57,9 +60,11 @@ private:
 
 	bool exploding;
 	int explTime;
+	float explScale;
 	sf::Texture explTexture;
 public:
 	inline Direction getDirection() {return d;}
+	inline void setExplScale(float scale) {explScale = scale; }
 
 	Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a);
 	void setSpriteScale(float scaleFactor);

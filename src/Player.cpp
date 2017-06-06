@@ -65,6 +65,7 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 
 	Bullet *bullet = new Bullet(abilities.a1.bulletImg, abilities.a1.bulletExplImg, position.x, position.y, dir, abilities.a1);
 	bullet->setSpriteScale(0.3f);
+	bullet->setExplScale(0.6f);
 
 	toBeDrawn.push_back(bullet);
 	toBeUpd.push_back(bullet);

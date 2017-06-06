@@ -4,6 +4,9 @@
 using namespace sf;
 using std::vector;
 
+#define WINDOW_SIZE_X 1366
+#define WINDOW_SIZE_Y 768
+
 #define LIFE_GOOD Color(5, 195, 0, 210)
 #define LIFE_MMM Color(215, 255, 0, 210)
 #define LIFE_BAD Color(248, 2, 40, 210)
