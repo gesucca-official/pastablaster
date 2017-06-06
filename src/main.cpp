@@ -52,10 +52,13 @@ static Player* initPlayer() {
 	strcpy(n.bulletExplImg, "./img/bang.png");
 	n.explFrames = 35;
 	n.explDecay = 7;
+	n.crazyness = 20;
 
 	AbilitySet as;
 	as.a1 = n;
 	as.a2 = n;
+	as.a3 = n;
+	as.a4 = n;
 
 	player = new Player(marioPath, s, marioControls, as);
 	toBeDrawn.push_back(player);

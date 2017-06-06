@@ -56,12 +56,14 @@ public:
 class Bullet : public GameObj, public DrawableObj, public ModeledObj {
 private:
 	Ability w;
-	Direction d;
-
 	bool exploding;
 	int explTime;
 	float explScale;
 	sf::Texture explTexture;
+
+protected:
+	Direction d;
+
 public:
 	inline Direction getDirection() {return d;}
 	inline void setExplScale(float scale) {explScale = scale; }
@@ -74,4 +76,14 @@ public:
 	bool exist();
 	float getCollisionDmg();
 	float getWeight();
+};
+
+class CrazyBullet : public Bullet {
+private:
+	int crazyness;
+public:
+	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a){
+		crazyness = c;
+	}
+	void update(sf::FloatRect fieldBounds);
 };

@@ -39,6 +39,11 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 			bigShotAhead(toBeDrawn, toBeUpd, playerSide);
 		if (event.key.code == controls.ability2) 
 			smallShotAround(toBeDrawn, toBeUpd, playerSide);
+		if (event.key.code == controls.ability3) 
+			crazyBullet(toBeDrawn, toBeUpd, playerSide);
+		if (event.key.code == controls.ability4) 
+			crazyBulletsBarrage(toBeDrawn, toBeUpd, playerSide);
+
 	}
 
 	if(event.type == sf::Event::KeyReleased) {
@@ -54,6 +59,7 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 	}
 }
 
+// first ability in set
 void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a1.manaCost)
@@ -72,36 +78,71 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 	playerSide.push_back(bullet);
 }
 
-// PIOGGIADIMARIOH to be done
+// second ability in set
 void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
-/*
-	char bulletImg[] = "./img/Mario_Nintendo.png";
+	if (stats.mp < abilities.a2.manaCost)
+		return;
+
+	stats.mp -= abilities.a2.manaCost;
+
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet1 = new Bullet(bulletImg, position.x, position.y, N, abilities.a1);
-	bullet1->setSpriteScale(0.2f);
-	Bullet *bullet2 = new Bullet(bulletImg, position.x, position.y, S, abilities.a1);
-	bullet2->setSpriteScale(0.2f);
-	Bullet *bullet3 = new Bullet(bulletImg, position.x, position.y, E, abilities.a1);
-	bullet3->setSpriteScale(0.2f);
-	Bullet *bullet4 = new Bullet(bulletImg, position.x, position.y, W, abilities.a1);
-	bullet4->setSpriteScale(0.2f);
+	vector<Bullet*> shots;
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, N, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, S, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, E, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, W, abilities.a2));
 
-	toBeDrawn.push_back(bullet1);
-	toBeUpd.push_back(bullet1);
-	playerSide.push_back(bullet1);
+	for (int i=0; i<shots.size(); i++) {
+		shots[i]->setSpriteScale(0.2f);
+		shots[i]->setExplScale(0.4f);
+		toBeDrawn.push_back(shots[i]);
+		toBeUpd.push_back(shots[i]);
+		playerSide.push_back(shots[i]);
+	}
+}
 
-	toBeDrawn.push_back(bullet2);
-	toBeUpd.push_back(bullet2);
-	playerSide.push_back(bullet2);
+// third ability in set
+void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
-	toBeDrawn.push_back(bullet3);
-	toBeUpd.push_back(bullet3);
-	playerSide.push_back(bullet3);
+	if (stats.mp < abilities.a3.manaCost)
+		return;
 
-	toBeDrawn.push_back(bullet4);
-	toBeUpd.push_back(bullet4);
-	playerSide.push_back(bullet4);
-	*/
+	stats.mp -= abilities.a3.manaCost;
+
+	sf::Vector2f position = DrawableObj::sprite->getPosition();
+
+	Bullet *bullet = new CrazyBullet(abilities.a3.bulletImg, abilities.a3.bulletExplImg, position.x, position.y, dir, abilities.a3, abilities.a3.crazyness);
+	bullet->setSpriteScale(0.3f);
+	bullet->setExplScale(0.6f);
+
+	toBeDrawn.push_back(bullet);
+	toBeUpd.push_back(bullet);
+	playerSide.push_back(bullet);
+}
+
+// fourth ability in set
+void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+
+	if (stats.mp < abilities.a4.manaCost)
+		return;
+
+	stats.mp -= abilities.a4.manaCost;
+
+	sf::Vector2f position = DrawableObj::sprite->getPosition();
+
+	vector<Bullet*> shots;
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, N, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, S, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, E, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, W, abilities.a4, abilities.a4.crazyness));
+
+	for (int i=0; i<shots.size(); i++) {
+		shots[i]->setSpriteScale(0.2f);
+		shots[i]->setExplScale(0.4f);
+		toBeDrawn.push_back(shots[i]);
+		toBeUpd.push_back(shots[i]);
+		playerSide.push_back(shots[i]);
+	}
 }

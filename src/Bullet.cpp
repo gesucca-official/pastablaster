@@ -41,6 +41,7 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 		return;
 	}
 
+	// movement
 	if (d==E)
 		sprite->move(w.bulletSpeed, 0);
 	if (d==W) 
@@ -52,6 +53,41 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 
 	if (!fieldBounds.intersects(getBound()))
 		GameObj::exist = false;
+}
+
+void CrazyBullet::update(sf::FloatRect fieldBounds) {
+	int luck = (rand() % static_cast<int>(256));
+	int whereToGo = luck%3;
+	
+	if (crazyness>luck)
+		switch (whereToGo) {
+			case 0:
+				d = N;
+				break;
+			case 1:
+				d = E;
+				break;
+			case 2:
+				d = W;
+				break;
+			case 3:
+				d = S;
+				break;
+			default: 
+				break;
+		}
+
+	//spinning effect
+	if (d==E)
+		sprite->rotate(90);
+	if (d==W) 
+		sprite->rotate(-90);
+	if (d==S) 
+		sprite->rotate(180);
+	if (d==N) 
+		sprite->rotate(-180);
+
+	Bullet::update(fieldBounds);
 }
 
 void Bullet::collide(ModeledObj &collided) {
