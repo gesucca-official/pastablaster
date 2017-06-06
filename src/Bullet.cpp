@@ -60,32 +60,58 @@ void CrazyBullet::update(sf::FloatRect fieldBounds) {
 	int whereToGo = luck%3;
 	
 	if (crazyness>luck)
-		switch (whereToGo) {
-			case 0:
-				d = N;
-				break;
-			case 1:
-				d = E;
-				break;
-			case 2:
-				d = W;
-				break;
-			case 3:
-				d = S;
-				break;
-			default: 
-				break;
-		}
+		switch (whereToGo) 
+	{
+		case 0:
+		d = N;
+		break;
+		case 1:
+		d = E;
+		break;
+		case 2:
+		d = W;
+		break;
+		case 3:
+		d = S;
+		break;
+		default: 
+		break;
+	}
 
 	//spinning effect
 	if (d==E)
-		sprite->rotate(90);
+		sprite->rotate(45);
 	if (d==W) 
-		sprite->rotate(-90);
+		sprite->rotate(-45);
 	if (d==S) 
-		sprite->rotate(180);
+		sprite->rotate(135);
 	if (d==N) 
-		sprite->rotate(-180);
+		sprite->rotate(-135);
+
+	//hue effect
+	// ok i'm too tired to think tonight
+	// those magic numbers should not exist
+	if (hueUp){
+		r += 2;
+		g += 4;
+		b += 3;
+		if (g>150) {
+			g = 150;
+			hueUp = false;
+		}
+	}
+	else {
+		b -= 4;
+		r -= 1;
+		g -= 2;
+			
+		if (g<0) {
+			g=0;
+			hueUp = true;
+		}
+
+	}
+	sprite->setColor(sf::Color(r, g, b, 255));
 
 	Bullet::update(fieldBounds);
 }

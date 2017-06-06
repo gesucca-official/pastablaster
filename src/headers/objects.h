@@ -81,8 +81,12 @@ public:
 class CrazyBullet : public Bullet {
 private:
 	int crazyness;
+	int r, g, b;
+	bool hueUp;
 public:
 	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a){
+		r = 255, g = 255, b = 255;
+		hueUp = true; 
 		crazyness = c;
 	}
 	void update(sf::FloatRect fieldBounds);
