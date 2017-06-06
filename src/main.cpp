@@ -85,7 +85,7 @@ static Persona* initOpponent() {
 	s.decel = 1.0;
 	s.teleportDist=100.0;
 
-	opponent = new Persona(oppoPath, 500, 200, s);
+	opponent = new Persona(oppoPath, 1000, 500, s);
 	toBeDrawn.push_back(opponent);
 	toBeUpd.push_back(opponent);
 	oppoSide.push_back(opponent);
@@ -168,7 +168,7 @@ int main() {
 
 	sf::VideoMode vm = sf::VideoMode().getDesktopMode();
 	RenderWindow window(vm, "Duel Screen", Style::Fullscreen);
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(20);
 
 	// view needs to be same pixels of background!!
 	// 'til I find a better way to do it, obviously
@@ -180,6 +180,8 @@ int main() {
 	opponent = initOpponent();
 
 	initOverScreen();
+
+	gamePaused = false;
 
 	// Start the game loop
 	while (window.isOpen()) {
@@ -193,11 +195,23 @@ int main() {
 
 			player->handleControls(event, toBeDrawn, toBeUpd, playerSide);
 
-			// ESC BUTTON: exit
 			if (event.type == Event::KeyPressed) {
+				// ESC BUTTON: exit
 				if (event.key.code == Keyboard::Escape)
 					window.close();
+
+				// P: pause
+				if (event.key.code == Keyboard::P)
+				{
+					if (gamePaused) {
+						gamePaused = false;
+					} else {
+						gamePaused = true;
+					}
+				}
 			}
+
+
 		}
 
 		window.clear();
@@ -205,9 +219,11 @@ int main() {
 		detectCollisions(playerSide, oppoSide);
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
-		//update and draw game object
-		for (int i=0; i<toBeUpd.size(); i++)
-			toBeUpd[i]->update(stage->getBound());
+		if (!gamePaused) {
+			for (int i=0; i<toBeUpd.size(); i++)
+				toBeUpd[i]->update(stage->getBound());
+		}
+
 		for (int i=0; i<toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
