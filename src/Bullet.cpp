@@ -6,7 +6,7 @@ Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ab
 
 	//default position
 	sprite->move(posX, posY);
-	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
+	sprite->setOrigin(sprite->getTexture()->getSize().x / 2, sprite->getTexture()->getSize().y / 2);
 
 	explTexture.loadFromFile(explImg);
 	explTexture.setSmooth(true);
@@ -15,16 +15,16 @@ Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ab
 	w = a;
 
 	// texture is drawn UP, so...
-	if (d==E)
+	if (d == E)
 		sprite->rotate(90);
-	if (d==W) 
+	if (d == W)
 		sprite->rotate(-90);
-	if (d==S) 
+	if (d == S)
 		sprite->rotate(180);
 }
 
 void Bullet::setSpriteScale(float f) {
-	DrawableObj::sprite->setScale(f, f); 
+	DrawableObj::sprite->setScale(f, f);
 }
 
 sf::FloatRect Bullet::getBound() {
@@ -36,19 +36,19 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 	if (exploding) {
 		w.dmg = w.dmg / w.explDecay; // if you remain or return on the explosion. you lose life!
 		explTime++;
-		if (explTime==w.explFrames)
+		if (explTime == w.explFrames)
 			GameObj::exist = false;
 		return;
 	}
 
 	// movement
-	if (d==E)
+	if (d == E)
 		sprite->move(w.bulletSpeed, 0);
-	if (d==W) 
+	if (d == W)
 		sprite->move(-w.bulletSpeed, 0);
-	if (d==N) 
+	if (d == N)
 		sprite->move(0, -w.bulletSpeed);
-	if (d==S) 
+	if (d == S)
 		sprite->move(0, w.bulletSpeed);
 
 	if (!fieldBounds.intersects(getBound()))
@@ -56,57 +56,55 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 }
 
 void CrazyBullet::update(sf::FloatRect fieldBounds) {
-	int luck = (rand() % static_cast<int>(256));
-	int whereToGo = luck%3;
-	
-	if (crazyness>luck)
-		switch (whereToGo) 
-	{
-		case 0:
-		d = N;
-		break;
-		case 1:
-		d = E;
-		break;
-		case 2:
-		d = W;
-		break;
-		case 3:
-		d = S;
-		break;
-		default: 
-		break;
-	}
+	int luck = (rand() % static_cast<int> (256));
+	int whereToGo = luck % 3;
+
+	if (crazyness > luck)
+		switch (whereToGo) {
+			case 0:
+				d = N;
+				break;
+			case 1:
+				d = E;
+				break;
+			case 2:
+				d = W;
+				break;
+			case 3:
+				d = S;
+				break;
+			default:
+				break;
+		}
 
 	//spinning effect
-	if (d==E)
+	if (d == E)
 		sprite->rotate(45);
-	if (d==W) 
+	if (d == W)
 		sprite->rotate(-45);
-	if (d==S) 
+	if (d == S)
 		sprite->rotate(135);
-	if (d==N) 
+	if (d == N)
 		sprite->rotate(-135);
 
 	//hue effect
 	// ok i'm too tired to think tonight
 	// those magic numbers should not exist
-	if (hueUp){
+	if (hueUp) {
 		r += 2;
 		g += 4;
 		b += 3;
-		if (g>150) {
+		if (g > 150) {
 			g = 150;
 			hueUp = false;
 		}
-	}
-	else {
+	} else {
 		b -= 4;
 		r -= 1;
 		g -= 2;
-			
-		if (g<0) {
-			g=0;
+
+		if (g < 0) {
+			g = 0;
 			hueUp = true;
 		}
 
@@ -123,8 +121,14 @@ void Bullet::collide(ModeledObj &collided) {
 	sprite->setScale(explScale, explScale);
 }
 
-inline bool Bullet::exist() {return GameObj::exist;}
+inline bool Bullet::exist() {
+	return GameObj::exist;
+}
 
-inline float Bullet::getCollisionDmg() {return w.dmg;}
+inline float Bullet::getCollisionDmg() {
+	return w.dmg;
+}
 
-inline float Bullet::getWeight() {return w.bulletWeight;}
+inline float Bullet::getWeight() {
+	return w.bulletWeight;
+}

@@ -2,7 +2,7 @@
 
 static Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
-	char musicPath[] =  "./sng/song.ogg";
+	char musicPath[] = "./sng/song.ogg";
 
 	Stage *stage = new Stage(stagePath, WINDOW_SIZE_X, musicPath);
 
@@ -37,18 +37,18 @@ static Player* initPlayer() {
 	s.manaRegen = 0.18f;
 	s.weigth = 2.0;
 	s.collisionDmg = 0.3;
-	s.maxSpeed=8.0;
-	s.accel= 1.0;
+	s.maxSpeed = 8.0;
+	s.accel = 1.0;
 	s.decel = 1.0;
-	s.teleportDist=150.0;
+	s.teleportDist = 150.0;
 
 	Ability n;
-	n.dmg=10.0;
+	n.dmg = 10.0;
 	n.bulletWeight = 10;
-	n.bulletSpeed= 5;
-	n.shootSpeed=20;
-	n.manaCost=10;
-	strcpy( n.bulletImg, "./img/player.png" );
+	n.bulletSpeed = 5;
+	n.shootSpeed = 20;
+	n.manaCost = 10;
+	strcpy(n.bulletImg, "./img/player.png");
 	strcpy(n.bulletExplImg, "./img/bang.png");
 	n.explFrames = 35;
 	n.explDecay = 7;
@@ -80,10 +80,10 @@ static Persona* initOpponent() {
 	s.manaRegen = 0.5f;
 	s.weigth = 2.0;
 	s.collisionDmg = 0.5;
-	s.maxSpeed=8.0;
-	s.accel= 1.0;
+	s.maxSpeed = 8.0;
+	s.accel = 1.0;
 	s.decel = 1.0;
-	s.teleportDist=100.0;
+	s.teleportDist = 100.0;
 
 	opponent = new Persona(oppoPath, 1000, 500, s);
 	toBeDrawn.push_back(opponent);
@@ -98,23 +98,23 @@ static void initOverScreen() {
 	Shape* lc = new RectangleShape(Vector2f(pLifeX, pLifeY));
 	lc-> setPosition(pLifePosX, pLifePosY);
 	lc-> setFillColor(BARS_FILL);
-	lc-> setOutlineColor (BARS_CONTOUR);
-	lc-> setOutlineThickness (contourThickness);
+	lc-> setOutlineColor(BARS_CONTOUR);
+	lc-> setOutlineThickness(contourThickness);
 	contours.push_back(lc);
 
 	Shape* mc = new RectangleShape(Vector2f(pManaX, pManaY));
 	mc-> setPosition(pManaPosX, pManaPosY);
 	mc-> setFillColor(BARS_FILL);
-	mc-> setOutlineColor (BARS_CONTOUR);
-	mc-> setOutlineThickness (contourThickness);
+	mc-> setOutlineColor(BARS_CONTOUR);
+	mc-> setOutlineThickness(contourThickness);
 	contours.push_back(mc);
 
 	Shape* oc = new RectangleShape(Vector2f(oX, oY));
 	oc-> setPosition(oPosX, oPosY);
 	oc->setOrigin(oX, 0.0f);
 	oc-> setFillColor(BARS_FILL);
-	oc-> setOutlineColor (BARS_CONTOUR);
-	oc-> setOutlineThickness (contourThickness);
+	oc-> setOutlineColor(BARS_CONTOUR);
+	oc-> setOutlineThickness(contourThickness);
 	contours.push_back(oc);
 
 	playerLifeBar = new RectangleShape(Vector2f(pLifeX, pLifeY));
@@ -136,16 +136,16 @@ static void initOverScreen() {
 
 	plName->setFont(*font);
 	plName->setString("LITTLE POOR FUSILLOH");
-	plName->setCharacterSize(36); 
-	plName->setPosition(40,0);
+	plName->setCharacterSize(36);
+	plName->setPosition(40, 0);
 
 	Text *oppoName = new Text();
 
 	oppoName->setFont(*font);
 	oppoName->setString("BIG BAD PIPA RIGATAH");
 	oppoName->setCharacterSize(36);
-	oppoName->setPosition(1000,0);
-	
+	oppoName->setPosition(1000, 0);
+
 	text.push_back(plName);
 	text.push_back(oppoName);
 }
@@ -153,9 +153,9 @@ static void initOverScreen() {
 static void overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
 	playerLifeBar->setScale(pLifePercent, 1.0);
-	if (pLifePercent<0.55)
+	if (pLifePercent < 0.55)
 		playerLifeBar->setFillColor(LIFE_MMM);
-	if (pLifePercent<0.26)
+	if (pLifePercent < 0.26)
 		playerLifeBar->setFillColor(LIFE_BAD);
 
 	float pManaPercent = (float) player->getMp() / (float) player->getMaxMp();
@@ -201,8 +201,7 @@ int main() {
 					window.close();
 
 				// P: pause
-				if (event.key.code == Keyboard::P)
-				{
+				if (event.key.code == Keyboard::P) {
 					if (gamePaused) {
 						gamePaused = false;
 					} else {
@@ -220,20 +219,20 @@ int main() {
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
 		if (!gamePaused) {
-			for (int i=0; i<toBeUpd.size(); i++)
+			for (int i = 0; i < toBeUpd.size(); i++)
 				toBeUpd[i]->update(stage->getBound());
 		}
 
-		for (int i=0; i<toBeDrawn.size(); i++)
+		for (int i = 0; i < toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
 		//draw non game objects here
 		window.draw(*playerLifeBar);
 		window.draw(*playerManaBar);
 		window.draw(*oppoLifeBar);
-		for (int i=0; i<contours.size(); i++)
+		for (int i = 0; i < contours.size(); i++)
 			window.draw(*contours[i]);
-		for (int i=0; i<text.size(); i++)
+		for (int i = 0; i < text.size(); i++)
 			window.draw(*text[i]);
 
 		window.display();

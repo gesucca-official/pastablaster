@@ -9,6 +9,7 @@ typedef enum {
 
 class GameObj {
 public:
+
 	inline GameObj() {
 		exist = true;
 	}
@@ -19,13 +20,15 @@ class DrawableObj {
 protected:
 	sf::Sprite *sprite;
 	sf::Texture texture;
-	
+
 public:
+
 	inline DrawableObj(char img[]) {
 		texture.loadFromFile(img);
 		texture.setSmooth(true);
 		sprite = new sf::Sprite(texture);
-	} 
+	}
+
 	inline void draw(sf::RenderWindow &window) {
 		window.draw(*sprite);
 	}

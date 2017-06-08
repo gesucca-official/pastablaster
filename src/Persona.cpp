@@ -1,6 +1,6 @@
 #include "headers/objects.h"
 
-Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableObj(img){
+Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableObj(img) {
 	stats = s;
 
 	running = false;
@@ -8,7 +8,7 @@ Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableO
 	bouncing = false;
 
 	//default position
-	sprite->setOrigin(sprite->getTexture()->getSize().x/2, sprite->getTexture()->getSize().y/2);
+	sprite->setOrigin(sprite->getTexture()->getSize().x / 2, sprite->getTexture()->getSize().y / 2);
 	sprite->move(posX, posY);
 	currentSpeed = 0.0;
 
@@ -21,78 +21,76 @@ void Persona::update(sf::FloatRect fieldBounds) {
 
 	// allineate direction now that collision is done
 	preUpdateDir = dir;
-	
+
 	/* BOUNCING LOGIC */
-	if (currentSpeed<stats.weigth)
+	if (currentSpeed < stats.weigth)
 		bouncing = false;
 
 	if (!fieldBounds.intersects(getBound()))
 		bouncing = true;
 
 	if (bouncing) {
-		if (dir==E)
+		if (dir == E)
 			sprite->move(-currentSpeed, 0);
-		if (dir==W) 
+		if (dir == W)
 			sprite->move(currentSpeed, 0);
-		if (dir==N) 
+		if (dir == N)
 			sprite->move(0, currentSpeed);
-		if (dir==S) 
+		if (dir == S)
 			sprite->move(0, -currentSpeed);
-		currentSpeed-= (stats.decel + stats.weigth/9);
+		currentSpeed -= (stats.decel + stats.weigth / 9);
 		return;
 	}
 
 	/*MOVEMENT BASED ON SPEED*/
-	if (dir==E)
+	if (dir == E)
 		sprite->move(currentSpeed, 0);
-	if (dir==W) 
+	if (dir == W)
 		sprite->move(-currentSpeed, 0);
-	if (dir==N) 
+	if (dir == N)
 		sprite->move(0, -currentSpeed);
-	if (dir==S) 
+	if (dir == S)
 		sprite->move(0, currentSpeed);
 
 	/*ACTION PHYSICS*/
 	if (running) {
-		currentSpeed+=stats.accel;
+		currentSpeed += stats.accel;
 		// speed cap
-		if (currentSpeed>=stats.maxSpeed) 
+		if (currentSpeed >= stats.maxSpeed)
 			currentSpeed = stats.maxSpeed;
-	}
-	else if (teleporting)	{
+	} else if (teleporting) {
 		currentSpeed = 0;
 		teleporting = false;
-	}
-	else
-		currentSpeed-= stats.decel;
+	} else
+		currentSpeed -= stats.decel;
 
-	if (currentSpeed<0)
+	if (currentSpeed < 0)
 		currentSpeed = 0;
 }
 
 void Persona::collide(ModeledObj &collided) {
-	stats.hp-=collided.getCollisionDmg();
+	stats.hp -= collided.getCollisionDmg();
 
 	//face the collision
 	// THIS TRIGGERS A FUNNY BUG
-	if (collided.getDirection()==E)
+	if (collided.getDirection() == E)
 		dir = W;
-	if (collided.getDirection()==W) 
+	if (collided.getDirection() == W)
 		dir = E;
-	if (collided.getDirection()==N) 
+	if (collided.getDirection() == N)
 		dir = S;
-	if (collided.getDirection()==S) 
+	if (collided.getDirection() == S)
 		dir = N;
 
 	//why here? this needs to be checked somewhere else
-	if (stats.hp<=0.0)
+	if (stats.hp <= 0.0)
 		GameObj::exist = false;
 
 	//bounce!
 	running = false;
 	teleporting = false;
 	bouncing = true;
-	currentSpeed += collided.getWeight()/3;
+	currentSpeed += collided.getWeight() / 3;
 }
 
 float Persona::getCollisionDmg() {

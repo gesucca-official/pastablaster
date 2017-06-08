@@ -23,30 +23,30 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 		//basic movement
 		if (event.key.code == controls.goRight)
 			run(E);
-		if (event.key.code == controls.goLeft) 
+		if (event.key.code == controls.goLeft)
 			run(W);
-		if (event.key.code == controls.goUp) 
+		if (event.key.code == controls.goUp)
 			run(N);
-		if (event.key.code == controls.goDown) 
+		if (event.key.code == controls.goDown)
 			run(S);
 
 		// teleport
-		if (event.key.code == controls.teleport) 
+		if (event.key.code == controls.teleport)
 			teleport();
 
 		// abilities
-		if (event.key.code == controls.ability1) 
+		if (event.key.code == controls.ability1)
 			bigShotAhead(toBeDrawn, toBeUpd, playerSide);
-		if (event.key.code == controls.ability2) 
+		if (event.key.code == controls.ability2)
 			smallShotAround(toBeDrawn, toBeUpd, playerSide);
-		if (event.key.code == controls.ability3) 
+		if (event.key.code == controls.ability3)
 			crazyBullet(toBeDrawn, toBeUpd, playerSide);
-		if (event.key.code == controls.ability4) 
+		if (event.key.code == controls.ability4)
 			crazyBulletsBarrage(toBeDrawn, toBeUpd, playerSide);
 
 	}
 
-	if(event.type == sf::Event::KeyReleased) {
+	if (event.type == sf::Event::KeyReleased) {
 		//basic movement
 		if (event.key.code == controls.goRight)
 			stop();
@@ -60,6 +60,7 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 }
 
 // first ability in set
+
 void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a1.manaCost)
@@ -79,6 +80,7 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 }
 
 // second ability in set
+
 void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a2.manaCost)
@@ -94,7 +96,7 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, E, abilities.a2));
 	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, W, abilities.a2));
 
-	for (int i=0; i<shots.size(); i++) {
+	for (int i = 0; i < shots.size(); i++) {
 		shots[i]->setSpriteScale(0.2f);
 		shots[i]->setExplScale(0.4f);
 		toBeDrawn.push_back(shots[i]);
@@ -104,6 +106,7 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 }
 
 // third ability in set
+
 void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a3.manaCost)
@@ -123,6 +126,7 @@ void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &t
 }
 
 // fourth ability in set
+
 void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a4.manaCost)
@@ -138,7 +142,7 @@ void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<Modeled
 	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, E, abilities.a4, abilities.a4.crazyness));
 	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, W, abilities.a4, abilities.a4.crazyness));
 
-	for (int i=0; i<shots.size(); i++) {
+	for (int i = 0; i < shots.size(); i++) {
 		shots[i]->setSpriteScale(0.2f);
 		shots[i]->setExplScale(0.4f);
 		toBeDrawn.push_back(shots[i]);

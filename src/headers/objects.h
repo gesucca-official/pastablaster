@@ -3,9 +3,10 @@
 #include "models.h"
 #include "interface.h"
 
-class Stage: public DrawableObj {
+class Stage : public DrawableObj {
 public:
 	sf::Music* music;
+
 	Stage(char img[], int screenWidth, char m[]) : DrawableObj(img) {
 		int ratio = screenWidth / (sprite->getTexture()->getSize().x);
 		sprite->setScale(ratio, ratio);
@@ -13,15 +14,17 @@ public:
 		music = new sf::Music();
 		music->openFromFile(m);
 	}
+
 	inline bool exist() {
 		return true;
 	}
+
 	inline sf::FloatRect getBound() {
 		return sprite->getGlobalBounds();
 	}
 };
 
-class Persona: public GameObj, public DrawableObj, public ModeledObj {
+class Persona : public GameObj, public DrawableObj, public ModeledObj {
 private:
 	float currentSpeed;
 	bool running;
@@ -34,11 +37,26 @@ protected:
 	Direction dir; //implement direction drawings on drawableobj level?
 
 public:
-	inline float getHp() {return stats.hp;}
-	inline float getMaxHp() {return stats.maxHp;}
-	inline float getMp() {return stats.mp;}
-	inline float getMaxMp() {return stats.maxMp;}
-	inline Direction getDirection() {return preUpdateDir;}
+
+	inline float getHp() {
+		return stats.hp;
+	}
+
+	inline float getMaxHp() {
+		return stats.maxHp;
+	}
+
+	inline float getMp() {
+		return stats.mp;
+	}
+
+	inline float getMaxMp() {
+		return stats.maxMp;
+	}
+
+	inline Direction getDirection() {
+		return preUpdateDir;
+	}
 
 	Persona(char img[], int posX, int posY, Stats s);
 	sf::FloatRect getBound();
@@ -65,8 +83,14 @@ protected:
 	Direction d;
 
 public:
-	inline Direction getDirection() {return d;}
-	inline void setExplScale(float scale) {explScale = scale; }
+
+	inline Direction getDirection() {
+		return d;
+	}
+
+	inline void setExplScale(float scale) {
+		explScale = scale;
+	}
 
 	Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a);
 	void setSpriteScale(float scaleFactor);
@@ -84,9 +108,10 @@ private:
 	int r, g, b;
 	bool hueUp;
 public:
-	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a){
+
+	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a) {
 		r = 255, g = 255, b = 255;
-		hueUp = true; 
+		hueUp = true;
 		crazyness = c;
 	}
 	void update(sf::FloatRect fieldBounds);
