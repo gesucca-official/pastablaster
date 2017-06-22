@@ -3,28 +3,26 @@
 #include "models.h"
 #include "interface.h"
 
+using namespace sf;
+
 class Stage : public DrawableObj {
 public:
-	sf::Music* music;
+	Music* music;
 
-	Stage(char img[], int screenWidth, char m[]) : DrawableObj(img) {
+	inline Stage(char img[], int screenWidth, char m[]) : DrawableObj(img) {
 		int ratio = screenWidth / (sprite->getTexture()->getSize().x);
 		sprite->setScale(ratio, ratio);
 
-		music = new sf::Music();
+		music = new Music();
 		music->openFromFile(m);
 	}
 
-	inline bool exist() {
-		return true;
-	}
-
-	inline sf::FloatRect getBound() {
+	inline FloatRect getBound() {
 		return sprite->getGlobalBounds();
 	}
 };
 
-class Persona : public GameObj, public DrawableObj, public ModeledObj {
+class Persona : public ModeledObj {
 private:
 	float currentSpeed;
 	bool running;
@@ -34,72 +32,50 @@ private:
 protected:
 	Stats stats;
 	Direction preUpdateDir;
-	Direction dir; //implement direction drawings on drawableobj level?
+	Direction dir;
 
 public:
+	inline float getHp() {return stats.hp;}
+	inline float getMaxHp() {return stats.maxHp;}
+	inline float getMp() {return stats.mp;}
+	inline float getMaxMp() {return stats.maxMp;}
+	inline Direction getDirection() {return preUpdateDir;}
 
-	inline float getHp() {
-		return stats.hp;
-	}
-
-	inline float getMaxHp() {
-		return stats.maxHp;
-	}
-
-	inline float getMp() {
-		return stats.mp;
-	}
-
-	inline float getMaxMp() {
-		return stats.maxMp;
-	}
-
-	inline Direction getDirection() {
-		return preUpdateDir;
-	}
+	inline virtual float getCollisionDmg() {return stats.collisionDmg;}
+	inline virtual float getWeight() {return stats.weigth;}
 
 	Persona(char img[], int posX, int posY, Stats s);
-	sf::FloatRect getBound();
-	void update(sf::FloatRect fieldBounds);
+
+	void update(FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
 	void run(Direction d);
 	void stop();
 	void turnBack();
 	void teleport();
-	bool exist();
-	float getCollisionDmg();
-	float getWeight();
 };
 
-class Bullet : public GameObj, public DrawableObj, public ModeledObj {
+class Bullet : public ModeledObj {
 private:
-	Ability w;
 	bool exploding;
 	int explTime;
 	float explScale;
-	sf::Texture explTexture;
+	Ability w;
+	Texture explTexture;
 
 protected:
 	Direction d;
 
 public:
-
-	inline Direction getDirection() {
-		return d;
-	}
-
-	inline void setExplScale(float scale) {
-		explScale = scale;
-	}
+	inline Direction getDirection() {return d;}
+	inline void setExplScale(float scale) {explScale = scale;}
+	inline virtual float getCollisionDmg() {return w.dmg;}
+	inline virtual float getWeight() {return w.bulletWeight;}
 
 	Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a);
+
 	void setSpriteScale(float scaleFactor);
-	void update(sf::FloatRect fieldBounds);
+	void update(FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
-	sf::FloatRect getBound();
-	bool exist();
-	float getCollisionDmg();
-	float getWeight();
 };
 
 class CrazyBullet : public Bullet {
@@ -107,12 +83,12 @@ private:
 	int crazyness;
 	int r, g, b;
 	bool hueUp;
-public:
 
+public:
 	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a) {
 		r = 255, g = 255, b = 255;
 		hueUp = true;
 		crazyness = c;
 	}
-	void update(sf::FloatRect fieldBounds);
+	void update(FloatRect fieldBounds);
 };

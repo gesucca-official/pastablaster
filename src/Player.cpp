@@ -60,7 +60,6 @@ void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, ve
 }
 
 // first ability in set
-
 void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a1.manaCost)
@@ -80,7 +79,6 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 }
 
 // second ability in set
-
 void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a2.manaCost)
@@ -106,7 +104,6 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 }
 
 // third ability in set
-
 void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a3.manaCost)
@@ -126,7 +123,6 @@ void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &t
 }
 
 // fourth ability in set
-
 void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
 
 	if (stats.mp < abilities.a4.manaCost)

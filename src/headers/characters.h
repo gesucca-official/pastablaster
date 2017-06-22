@@ -5,12 +5,11 @@ using namespace std;
 class Player : public Persona {
 public:
 	Player(char img[], Stats s, ControlSet ctrl, AbilitySet a);
+	
 	void update(sf::FloatRect fieldBounds);
 	void handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide);
 
-	inline float getMp() {
-		return stats.mp;
-	}
+	inline float getMp() {return stats.mp;}
 
 private:
 	ControlSet controls;

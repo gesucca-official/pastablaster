@@ -1,6 +1,6 @@
 #include "headers/objects.h"
 
-Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a) : GameObj(), DrawableObj(img), ModeledObj() {
+Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a) : ModeledObj(img) {
 	exploding = false;
 	explTime = 0;
 
@@ -27,17 +27,13 @@ void Bullet::setSpriteScale(float f) {
 	DrawableObj::sprite->setScale(f, f);
 }
 
-sf::FloatRect Bullet::getBound() {
-	return sprite->getGlobalBounds();
-}
-
 void Bullet::update(sf::FloatRect fieldBounds) {
 
 	if (exploding) {
-		w.dmg = w.dmg / w.explDecay; // if you remain or return on the explosion. you lose life!
+		w.dmg = w.dmg / w.explDecay; // if you remain or return on the explosion, you lose life!
 		explTime++;
 		if (explTime == w.explFrames)
-			GameObj::exist = false;
+			removeFromGame();
 		return;
 	}
 
@@ -51,8 +47,8 @@ void Bullet::update(sf::FloatRect fieldBounds) {
 	if (d == S)
 		sprite->move(0, w.bulletSpeed);
 
-	if (!fieldBounds.intersects(getBound()))
-		GameObj::exist = false;
+	if (!fieldBounds.intersects(DrawableObj::getBound()))
+		removeFromGame();
 }
 
 void CrazyBullet::update(sf::FloatRect fieldBounds) {
@@ -119,16 +115,4 @@ void Bullet::collide(ModeledObj &collided) {
 
 	sprite->setTexture(explTexture, true);
 	sprite->setScale(explScale, explScale);
-}
-
-inline bool Bullet::exist() {
-	return GameObj::exist;
-}
-
-inline float Bullet::getCollisionDmg() {
-	return w.dmg;
-}
-
-inline float Bullet::getWeight() {
-	return w.bulletWeight;
 }

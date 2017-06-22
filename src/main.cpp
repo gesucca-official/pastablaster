@@ -1,4 +1,5 @@
 #include "headers/main.h"
+#include "headers/overimpr.h"
 
 static Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
@@ -168,7 +169,7 @@ int main() {
 
 	sf::VideoMode vm = sf::VideoMode().getDesktopMode();
 	RenderWindow window(vm, "Duel Screen", Style::Fullscreen);
-	window.setFramerateLimit(20);
+	window.setFramerateLimit(60);
 
 	// view needs to be same pixels of background!!
 	// 'til I find a better way to do it, obviously

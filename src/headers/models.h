@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 typedef enum {
 	N,
 	S,
@@ -8,41 +10,42 @@ typedef enum {
 } Direction;
 
 class GameObj {
-public:
+private: 
+	bool exist;
 
+public:
 	inline GameObj() {
 		exist = true;
 	}
-	bool exist;
+	inline bool doesExists() {return exist;}
+	inline void removeFromGame() {exist = false;}
 };
 
-class DrawableObj {
+class DrawableObj : public GameObj {
 protected:
-	sf::Sprite *sprite;
-	sf::Texture texture;
+	Sprite *sprite;
+	Texture texture;
 
 public:
-
-	inline DrawableObj(char img[]) {
+	inline DrawableObj(char img[]) : GameObj() {
 		texture.loadFromFile(img);
 		texture.setSmooth(true);
-		sprite = new sf::Sprite(texture);
+		sprite = new Sprite(texture);
 	}
 
-	inline void draw(sf::RenderWindow &window) {
+	inline void draw(RenderWindow &window) {
 		window.draw(*sprite);
 	}
-	virtual bool exist() = 0;
-	virtual sf::FloatRect getBound() = 0;
+
+	inline FloatRect getBound() {return sprite->getGlobalBounds();}
 };
 
-class ModeledObj {
+class ModeledObj : public DrawableObj {
 public:
-	virtual void update(sf::FloatRect fieldBounds) = 0;
+	inline ModeledObj(char img[]) : DrawableObj(img) {}
+	virtual void update(FloatRect fieldBounds) = 0;
 	virtual void collide(ModeledObj &collided) = 0;
 	virtual Direction getDirection() = 0;
-	virtual bool exist() = 0;
-	virtual sf::FloatRect getBound() = 0;
 	virtual float getCollisionDmg() = 0;
 	virtual float getWeight() = 0;
 };

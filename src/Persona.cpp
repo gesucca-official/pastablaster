@@ -1,6 +1,6 @@
 #include "headers/objects.h"
 
-Persona::Persona(char img[], int posX, int posY, Stats s) : GameObj(), DrawableObj(img) {
+Persona::Persona(char img[], int posX, int posY, Stats s) : ModeledObj(img) {
 	stats = s;
 
 	running = false;
@@ -26,7 +26,7 @@ void Persona::update(sf::FloatRect fieldBounds) {
 	if (currentSpeed < stats.weigth)
 		bouncing = false;
 
-	if (!fieldBounds.intersects(getBound()))
+	if (!fieldBounds.intersects(DrawableObj::getBound()))
 		bouncing = true;
 
 	if (bouncing) {
@@ -72,7 +72,7 @@ void Persona::collide(ModeledObj &collided) {
 	stats.hp -= collided.getCollisionDmg();
 
 	//face the collision
-	// THIS TRIGGERS A FUNNY BUG
+	// THIS TRIGGERS A FUNNY BUG -- calling it a feature
 	if (collided.getDirection() == E)
 		dir = W;
 	if (collided.getDirection() == W)
@@ -84,29 +84,13 @@ void Persona::collide(ModeledObj &collided) {
 
 	//why here? this needs to be checked somewhere else
 	if (stats.hp <= 0.0)
-		GameObj::exist = false;
+		removeFromGame();
 
 	//bounce!
 	running = false;
 	teleporting = false;
 	bouncing = true;
 	currentSpeed += collided.getWeight() / 3;
-}
-
-float Persona::getCollisionDmg() {
-	return stats.collisionDmg;
-}
-
-float Persona::getWeight() {
-	return stats.weigth;
-}
-
-sf::FloatRect Persona::getBound() {
-	return sprite->getGlobalBounds();
-}
-
-bool Persona::exist() {
-	return GameObj::exist;
 }
 
 void Persona::run(Direction d) {
