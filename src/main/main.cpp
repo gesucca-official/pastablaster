@@ -1,8 +1,16 @@
 #include "headers/main.h"
+#include "../loader/load.h"
 
-static Stage* initStage() {
-	char stagePath[] = "./img/bkg.png";
-	char musicPath[] = "./sng/song.ogg";
+static Stage* initStage(char* file) {
+
+	char stagePath[256];
+	char musicPath[256];
+	char skey[] = "BKGD";
+	char mkey[] = "TRCK";
+
+	DatFile* f = new DatFile(file);
+	f->read(skey, stagePath);
+	f->read(mkey, musicPath);
 
 	Stage *stage = new Stage(stagePath, WINDOW_SIZE_X, musicPath);
 
@@ -172,6 +180,10 @@ static bool overScreenLogic() {
 }
 
 static void gameOverHandle() {
+
+	stage->music->stop();
+	//play something like fanfare
+	
 	Text* msg = new Text();
 	msg->setFont(*font);
 	msg->setCharacterSize(56);
@@ -196,7 +208,11 @@ static void gameOverHandle() {
 	text.push_back(msg);
 }
 
-int main() {
+// ARGS: 1-stage, 2-...
+int main(int argc, char* argv[]) {
+
+	if (argc<2)
+		return EXIT_FAILURE;
 
 	sf::VideoMode vm = sf::VideoMode().getDesktopMode();
 	RenderWindow window(vm, "Duel Screen", Style::Fullscreen);
@@ -207,7 +223,7 @@ int main() {
 	View view(FloatRect(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y));
 	window.setView(view);
 
-	stage = initStage();
+	stage = initStage(argv[1]);
 	player = initPlayer();
 	opponent = initOpponent();
 
