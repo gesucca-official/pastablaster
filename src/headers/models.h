@@ -38,6 +38,7 @@ public:
 	}
 
 	inline FloatRect getBound() {return sprite->getGlobalBounds();}
+	inline void setSpriteScale(float f) {sprite->setScale(f, f);}
 };
 
 class ModeledObj : public DrawableObj {

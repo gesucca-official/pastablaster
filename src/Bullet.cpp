@@ -1,8 +1,13 @@
 #include "headers/objects.h"
 
-Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a) : ModeledObj(img) {
+Bullet::Bullet(char img[], char explImg[], char soundfx[], int posX, int posY, Direction dir, Ability a) : ModeledObj(img) {
 	exploding = false;
 	explTime = 0;
+
+	sfxb = new SoundBuffer();
+	sfxb->loadFromFile(soundfx);
+	sfx = new Sound();
+	sfx->setBuffer(*sfxb);
 
 	//default position
 	sprite->move(posX, posY);
@@ -21,10 +26,6 @@ Bullet::Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ab
 		sprite->rotate(-90);
 	if (d == S)
 		sprite->rotate(180);
-}
-
-void Bullet::setSpriteScale(float f) {
-	DrawableObj::sprite->setScale(f, f);
 }
 
 void Bullet::update(sf::FloatRect fieldBounds) {
@@ -112,6 +113,7 @@ void CrazyBullet::update(sf::FloatRect fieldBounds) {
 
 void Bullet::collide(ModeledObj &collided) {
 	exploding = true;
+	sfx->play();
 
 	sprite->setTexture(explTexture, true);
 	sprite->setScale(explScale, explScale);

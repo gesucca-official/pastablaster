@@ -69,7 +69,7 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet = new Bullet(abilities.a1.bulletImg, abilities.a1.bulletExplImg, position.x, position.y, dir, abilities.a1);
+	Bullet *bullet = new Bullet(abilities.a1.bulletImg, abilities.a1.bulletExplImg, abilities.a1.bulletSoundFx, position.x, position.y, dir, abilities.a1);
 	bullet->setSpriteScale(0.3f);
 	bullet->setExplScale(0.6f);
 
@@ -89,10 +89,10 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
 	vector<Bullet*> shots;
-	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, N, abilities.a2));
-	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, S, abilities.a2));
-	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, E, abilities.a2));
-	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, position.x, position.y, W, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, abilities.a2.bulletSoundFx, position.x, position.y, N, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, abilities.a2.bulletSoundFx, position.x, position.y, S, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, abilities.a2.bulletSoundFx, position.x, position.y, E, abilities.a2));
+	shots.push_back(new Bullet(abilities.a2.bulletImg, abilities.a2.bulletExplImg, abilities.a2.bulletSoundFx, position.x, position.y, W, abilities.a2));
 
 	for (int i = 0; i < shots.size(); i++) {
 		shots[i]->setSpriteScale(0.2f);
@@ -113,7 +113,7 @@ void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &t
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet = new CrazyBullet(abilities.a3.bulletImg, abilities.a3.bulletExplImg, position.x, position.y, dir, abilities.a3, abilities.a3.crazyness);
+	Bullet *bullet = new CrazyBullet(abilities.a3.bulletImg, abilities.a3.bulletExplImg, abilities.a3.bulletSoundFx, position.x, position.y, dir, abilities.a3, abilities.a3.crazyness);
 	bullet->setSpriteScale(0.3f);
 	bullet->setExplScale(0.6f);
 
@@ -133,10 +133,10 @@ void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<Modeled
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
 	vector<Bullet*> shots;
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, N, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, S, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, E, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, position.x, position.y, W, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, N, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, S, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, E, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, W, abilities.a4, abilities.a4.crazyness));
 
 	for (int i = 0; i < shots.size(); i++) {
 		shots[i]->setSpriteScale(0.2f);

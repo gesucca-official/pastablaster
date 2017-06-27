@@ -24,6 +24,7 @@ typedef struct {
 	float manaCost;
 	char bulletImg[MAX_PATH_LEN];
 	char bulletExplImg[MAX_PATH_LEN];
+	char bulletSoundFx[MAX_PATH_LEN];
 	int explFrames;
 	int explDecay;
 	int crazyness;

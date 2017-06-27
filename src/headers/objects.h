@@ -22,6 +22,12 @@ public:
 	}
 };
 
+class Bar : public DrawableObj {
+public: 
+	inline Bar(char img[]) : DrawableObj(img) {}
+	inline void setPos(float x, float y) {sprite->setPosition(x,y);}
+};
+
 class Persona : public ModeledObj {
 private:
 	float currentSpeed;
@@ -61,6 +67,8 @@ private:
 	float explScale;
 	Ability w;
 	Texture explTexture;
+	SoundBuffer *sfxb;
+	Sound *sfx;
 
 protected:
 	Direction d;
@@ -71,9 +79,8 @@ public:
 	inline virtual float getCollisionDmg() {return w.dmg;}
 	inline virtual float getWeight() {return w.bulletWeight;}
 
-	Bullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a);
+	Bullet(char img[], char explImg[], char soundfx[], int posX, int posY, Direction dir, Ability a);
 
-	void setSpriteScale(float scaleFactor);
 	void update(FloatRect fieldBounds);
 	void collide(ModeledObj &collided);
 };
@@ -85,7 +92,7 @@ private:
 	bool hueUp;
 
 public:
-	inline CrazyBullet(char img[], char explImg[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, posX, posY, dir, a) {
+	inline CrazyBullet(char img[], char explImg[], char soundfx[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, soundfx, posX, posY, dir, a) {
 		r = 255, g = 255, b = 255;
 		hueUp = true;
 		crazyness = c;

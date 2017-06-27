@@ -1,5 +1,4 @@
 #include "headers/main.h"
-#include "headers/overimpr.h"
 
 static Stage* initStage() {
 	char stagePath[] = "./img/bkg.png";
@@ -51,6 +50,7 @@ static Player* initPlayer() {
 	n.manaCost = 10;
 	strcpy(n.bulletImg, "./img/player.png");
 	strcpy(n.bulletExplImg, "./img/bang.png");
+	strcpy(n.bulletSoundFx, "./snd/1.wav");
 	n.explFrames = 35;
 	n.explDecay = 7;
 	n.crazyness = 20;
@@ -96,62 +96,59 @@ static Persona* initOpponent() {
 
 static void initOverScreen() {
 
-	Shape* lc = new RectangleShape(Vector2f(pLifeX, pLifeY));
-	lc-> setPosition(pLifePosX, pLifePosY);
-	lc-> setFillColor(BARS_FILL);
-	lc-> setOutlineColor(BARS_CONTOUR);
-	lc-> setOutlineThickness(contourThickness);
-	contours.push_back(lc);
+	// read this from proper place
+	char opponent[] = "big bad pipa rigata";
+	char player[] = "little poor fusillo";
 
-	Shape* mc = new RectangleShape(Vector2f(pManaX, pManaY));
-	mc-> setPosition(pManaPosX, pManaPosY);
-	mc-> setFillColor(BARS_FILL);
-	mc-> setOutlineColor(BARS_CONTOUR);
-	mc-> setOutlineThickness(contourThickness);
-	contours.push_back(mc);
+	/**soma magic numbers here*/
 
-	Shape* oc = new RectangleShape(Vector2f(oX, oY));
-	oc-> setPosition(oPosX, oPosY);
-	oc->setOrigin(oX, 0.0f);
-	oc-> setFillColor(BARS_FILL);
-	oc-> setOutlineColor(BARS_CONTOUR);
-	oc-> setOutlineThickness(contourThickness);
-	contours.push_back(oc);
+	/*skins*/
+	char pImg[] = "./img/pbar.png";
+	pBar = new Bar(pImg);
+	pBar->setSpriteScale(1.8f);
+	//pBar->setPos(0.0f, 0.0f);
+	
+	char oImg[] = "./img/obar.png";
+	oBar = new Bar(oImg);
+	oBar->setSpriteScale(1.8f);
+	oBar->setPos(825.0f, 0.0f);
 
-	playerLifeBar = new RectangleShape(Vector2f(pLifeX, pLifeY));
-	playerLifeBar->setPosition(pLifePosX, pLifePosY);
+	/*rectangle fills*/
+	playerLifeBar = new RectangleShape(Vector2f(450.0, 30.0));
+	playerLifeBar->setPosition(50.0, 50.0);
 	playerLifeBar->setFillColor(LIFE_GOOD);
-	playerManaBar = new RectangleShape(Vector2f(pManaX, pManaY));
-	playerManaBar->setPosition(pManaPosX, pManaPosY);
+	playerManaBar = new RectangleShape(Vector2f(250.0, 10.0));
+	playerManaBar->setPosition(80.0, 80.0);
 	playerManaBar->setFillColor(MANA);
 
-	oppoLifeBar = new RectangleShape(Vector2f(oX, oY));
-	oppoLifeBar->setOrigin(oX, 0.0f);
-	oppoLifeBar->setPosition(oPosX, oPosY);
+	oppoLifeBar = new RectangleShape(Vector2f(430.0, 30.0));
+	oppoLifeBar->setOrigin(430.0, 0.0f);
+	oppoLifeBar->setPosition(1300.0, 50.0);
 	oppoLifeBar->setFillColor(OPPO_LIFE);
 
 	font = new Font();
-	font->loadFromFile("./fnt/ancherr.ttf");
+	font->loadFromFile("./fnt/slp.ttf");
 
 	Text *plName = new Text();
-
 	plName->setFont(*font);
-	plName->setString("LITTLE POOR FUSILLOH");
-	plName->setCharacterSize(36);
-	plName->setPosition(40, 0);
+	plName->setString(player);
+	plName->setColor(Color(0,26,0,255));
+	plName->setCharacterSize(24);
+	plName->setPosition(280.0f, 15.0f);
 
 	Text *oppoName = new Text();
-
 	oppoName->setFont(*font);
-	oppoName->setString("BIG BAD PIPA RIGATAH");
-	oppoName->setCharacterSize(36);
-	oppoName->setPosition(1000, 0);
+	oppoName->setString(opponent);
+	oppoName->setCharacterSize(24);
+	oppoName->setOrigin(24*strlen(opponent), 0.0);
+	oppoName->setColor(Color(26,0,0,255));
+	oppoName->setPosition(1360.0f, 15.0f);
 
 	text.push_back(plName);
 	text.push_back(oppoName);
 }
 
-static void overScreenLogic() {
+static bool overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
 	playerLifeBar->setScale(pLifePercent, 1.0);
 	if (pLifePercent < 0.55)
@@ -163,6 +160,40 @@ static void overScreenLogic() {
 	playerManaBar->setScale(pManaPercent, 1.0);
 	float oLifePercent = (float) opponent->getHp() / (float) opponent->getMaxHp();
 	oppoLifeBar->setScale(oLifePercent, 1.0);
+
+	const float epsilon = 0.5f;
+	if (oLifePercent < epsilon)
+	{
+		playerWon = true;
+		return true;
+	}
+
+	return pLifePercent < epsilon;
+}
+
+static void gameOverHandle() {
+	Text* msg = new Text();
+	msg->setFont(*font);
+	msg->setCharacterSize(56);
+
+	if (!playerWon)
+	{
+		msg->setString("YOU LOST. GAME OVER.");
+		msg->setColor(Color(240,30,0,255));
+	}
+	else if (playerWon)
+	{
+		msg->setString("YOU WON!!!");
+		msg->setColor(Color(30,255,15,255));
+	}
+
+	//center text
+	sf::FloatRect textRect = msg->getLocalBounds();
+	msg->setOrigin(textRect.left + textRect.width/2.0f,
+	textRect.top  + textRect.height/2.0f);
+	msg->setPosition(sf::Vector2f(WINDOW_SIZE_X/2.0f,WINDOW_SIZE_Y/2.0f));
+
+	text.push_back(msg);
 }
 
 int main() {
@@ -182,13 +213,14 @@ int main() {
 
 	initOverScreen();
 
-	gamePaused = false;
-
 	// Start the game loop
 	while (window.isOpen()) {
 
 		// life and mana display logic
-		overScreenLogic();
+		gameOver = overScreenLogic();
+
+		if (gameOver)
+			gameOverHandle();
 
 		// Process events
 		Event event;
@@ -210,8 +242,6 @@ int main() {
 					}
 				}
 			}
-
-
 		}
 
 		window.clear();
@@ -219,7 +249,7 @@ int main() {
 		detectCollisions(playerSide, oppoSide);
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
-		if (!gamePaused) {
+		if (!gamePaused && !gameOver) {
 			for (int i = 0; i < toBeUpd.size(); i++)
 				toBeUpd[i]->update(stage->getBound());
 		}
@@ -231,8 +261,9 @@ int main() {
 		window.draw(*playerLifeBar);
 		window.draw(*playerManaBar);
 		window.draw(*oppoLifeBar);
-		for (int i = 0; i < contours.size(); i++)
-			window.draw(*contours[i]);
+		pBar -> draw(window);
+		oBar -> draw(window);
+
 		for (int i = 0; i < text.size(); i++)
 			window.draw(*text[i]);
 

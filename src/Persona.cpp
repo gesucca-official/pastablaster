@@ -104,7 +104,11 @@ void Persona::stop() {
 }
 
 void Persona::teleport() {
-	//this should be improved...
+	//high cost hardwired
+	if (stats.mp < stats.maxMp/3)
+		return;
+	stats.mp = 0;
+
 	teleporting = true;
 	currentSpeed = stats.teleportDist;
 }
