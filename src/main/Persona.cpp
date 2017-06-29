@@ -15,6 +15,8 @@ Persona::Persona(char img[], int posX, int posY, Stats s) : ModeledObj(img) {
 	//just to not leave it blanck
 	dir = E;
 	preUpdateDir = E;
+
+	cooldown = 0.0;
 }
 
 void Persona::update(sf::FloatRect fieldBounds) {

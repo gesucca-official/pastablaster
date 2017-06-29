@@ -39,6 +39,7 @@ protected:
 	Stats stats;
 	Direction preUpdateDir;
 	Direction dir;
+	float cooldown;
 
 public:
 	inline float getHp() {return stats.hp;}

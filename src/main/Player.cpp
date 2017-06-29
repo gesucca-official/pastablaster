@@ -15,6 +15,9 @@ void Player::update(sf::FloatRect fieldBounds) {
 	//mana regen
 	if (stats.mp < stats.maxMp)
 		stats.mp += (float) stats.manaRegen;
+
+	//ability cooldown
+	cooldown -= 0.5f;
 }
 
 void Player::handleControls(sf::Event event, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
@@ -65,6 +68,11 @@ void Player::bigShotAhead(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &
 	if (stats.mp < abilities.a1.manaCost)
 		return;
 
+	if (cooldown > 0.1f)
+		return;
+	else
+		cooldown = abilities.a1.shootSpeed;
+
 	stats.mp -= abilities.a1.manaCost;
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
@@ -83,6 +91,11 @@ void Player::smallShotAround(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*
 
 	if (stats.mp < abilities.a2.manaCost)
 		return;
+
+	if (cooldown > 0.1f)
+		return;
+	else
+		cooldown = abilities.a2.shootSpeed;
 
 	stats.mp -= abilities.a2.manaCost;
 
@@ -109,6 +122,11 @@ void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &t
 	if (stats.mp < abilities.a3.manaCost)
 		return;
 
+	if (cooldown > 0.1f)
+		return;
+	else
+		cooldown = abilities.a3.shootSpeed;
+
 	stats.mp -= abilities.a3.manaCost;
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
@@ -127,6 +145,11 @@ void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<Modeled
 
 	if (stats.mp < abilities.a4.manaCost)
 		return;
+
+	if (cooldown > 0.1f)
+		return;
+	else
+		cooldown = abilities.a4.shootSpeed;
 
 	stats.mp -= abilities.a4.manaCost;
 
