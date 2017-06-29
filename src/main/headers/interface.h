@@ -2,18 +2,20 @@
 
 #define MAX_PATH_LEN 30
 
+using namespace sf;
+
 typedef struct {
-	sf::Keyboard::Key goRight;
-	sf::Keyboard::Key goLeft;
-	sf::Keyboard::Key goUp;
-	sf::Keyboard::Key goDown;
+	Keyboard::Key goRight;
+	Keyboard::Key goLeft;
+	Keyboard::Key goUp;
+	Keyboard::Key goDown;
 
-	sf::Keyboard::Key teleport;
+	Keyboard::Key teleport;
 
-	sf::Keyboard::Key ability1;
-	sf::Keyboard::Key ability2;
-	sf::Keyboard::Key ability3;
-	sf::Keyboard::Key ability4;
+	Keyboard::Key ability1;
+	Keyboard::Key ability2;
+	Keyboard::Key ability3;
+	Keyboard::Key ability4;
 } ControlSet;
 
 typedef struct {

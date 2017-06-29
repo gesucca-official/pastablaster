@@ -1,4 +1,3 @@
-#include <string.h>
 #include "engine.h"
 
 using namespace sf;

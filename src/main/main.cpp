@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "headers/main.h"
 #include "../loader/load.h"
 

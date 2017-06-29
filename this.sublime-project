@@ -12,7 +12,7 @@
 		{
 			"folder_exclude_patterns":
 			[
-				"lib", "bin", "img", "fnt", "sng"
+				"lib", "bin", "img", "fnt", "sng", "snd"
 			],
 			"path": "."
 		}

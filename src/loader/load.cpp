@@ -1,7 +1,15 @@
-#include "load.h"
 #include <string.h>
+#include "load.h"
 
-void DatFile::read(char key[], char res[]) {
+//#define WINDOWS
+
+#ifdef WINDOWS
+	#define EXPORT_DLL extern "C" __declspec(dllexport)
+#else
+	#define EXPORT_DLL
+#endif
+
+EXPORT_DLL void DatFile::read(char key[], char res[]) {
 
 	char line[256];
 	char readKey[5]; //4 chars to name stuff is hardcoded in dat file
