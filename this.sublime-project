@@ -2,8 +2,13 @@
 	"build_systems":
 	[
 		{
-			"cmd": "./build.sh",
-			"name": "Build and Run",
+			"cmd": "./clean_build.sh",
+			"name": "Clean Build and Run",
+			"working_dir": "${project_path:${folder}}"
+		},
+		{
+			"cmd": "make && ./run.sh",
+			"name": "Fast Build and Run",
 			"working_dir": "${project_path:${folder}}"
 		}
 	],
