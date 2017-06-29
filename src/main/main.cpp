@@ -7,8 +7,7 @@ static Stage* initStage(char* file) {
 
 	char stagePath[256];
 	char musicPath[256];
-	char skey[] = "BKGD";
-	char mkey[] = "TRCK";
+	char skey[] = "BKGD", mkey[] = "TRCK";
 
 	DatFile* f = new DatFile(file);
 	f->read(skey, stagePath);
@@ -21,57 +20,82 @@ static Stage* initStage(char* file) {
 	stage->music->setVolume(100);
 
 	toBeDrawn.push_back(stage);
-
 	return stage;
 }
 
-static Player* initPlayer() {
-	char marioPath[] = "./img/player.png";
+static Player* initPlayer(char* file) {
 
-	ControlSet marioControls;
-	marioControls.goRight = Keyboard::D;
-	marioControls.goLeft = Keyboard::A;
-	marioControls.goUp = Keyboard::W;
-	marioControls.goDown = Keyboard::S;
-	marioControls.teleport = Keyboard::Space;
-	marioControls.ability1 = Keyboard::J;
-	marioControls.ability2 = Keyboard::K;
-	marioControls.ability3 = Keyboard::M;
-	marioControls.ability4 = Keyboard::N;
+	DatFile* plFile = new DatFile(file);
+	char hp[] = "MXHP", mp[] = "MXMP", regen[] = "MNRG", weight[] = "WGHT",
+	collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", tele[] = "TLPT";
 
 	Stats s;
-	s.hp = 100.0;
-	s.maxHp = 100.0;
-	s.mp = 100;
-	s.maxMp = 100.0;
-	s.manaRegen = 0.18f;
-	s.weigth = 2.0;
-	s.collisionDmg = 0.3;
-	s.maxSpeed = 8.0;
-	s.accel = 1.0;
-	s.decel = 1.0;
-	s.teleportDist = 150.0;
+	s.maxHp = plFile->read(hp);
+	s.hp = s.maxHp;
+	s.maxMp = plFile->read(mp);
+	s.mp = s.maxMp;
+	s.manaRegen = plFile->read(regen);
+	s.weigth = plFile->read(weight);
+	s.collisionDmg = plFile->read(collDmg);
+	s.maxSpeed = plFile->read(spe);
+	s.accel = plFile->read(acc);
+	s.decel = plFile->read(dec);
+	s.teleportDist = plFile->read(tele);
+	
+	Ability a1, a2, a3, a4;
+	Ability cycle[] = {a1, a2, a3, a4};
+	int i;
+	for (i=0; i<4; i++)
+	{
+		char ability[64], path[64];
+		sprintf(ability, "ABL%d", i+1);
+		plFile->read(ability, path);
+		DatFile* abFile = new DatFile(path);
 
-	Ability n;
-	n.dmg = 10.0;
-	n.bulletWeight = 10;
-	n.bulletSpeed = 5;
-	n.shootSpeed = 20;
-	n.manaCost = 10;
-	strcpy(n.bulletImg, "./img/player.png");
-	strcpy(n.bulletExplImg, "./img/bang.png");
-	strcpy(n.bulletSoundFx, "./snd/1.wav");
-	n.explFrames = 35;
-	n.explDecay = 7;
-	n.crazyness = 20;
+		char dmg[] = "DAMG", bweigth[] = "BWGT", bspeed[] = "BSPE", shtspd[] = "SSPE",
+		mana[] = "MCST", img[] = "BIMG", eimg[]= "EXPL", sound[] = "SDFX", frames[] = "FRAM", decay[] = "DCAY", crazy[] = "CRZY";
+		
+		cycle[i].dmg = abFile->read(dmg);
+		cycle[i].bulletWeight = abFile->read(bweigth);
+		cycle[i].bulletSpeed = abFile->read(bspeed);
+		cycle[i].shootSpeed = abFile->read(shtspd);
+		cycle[i].manaCost = abFile->read(mana);
+		char buffer[64];
+		abFile->read(img, buffer);
+		strcpy(cycle[i].bulletImg, buffer);
+		abFile->read(eimg, buffer);
+		strcpy(cycle[i].bulletExplImg, buffer);
+		abFile->read(sound, buffer);
+		strcpy(cycle[i].bulletSoundFx, buffer);
+
+		cycle[i].explFrames = abFile->read(frames);
+		cycle[i].explDecay = abFile->read(decay);
+		cycle[i].crazyness = abFile->read(crazy);
+	}
 
 	AbilitySet as;
-	as.a1 = n;
-	as.a2 = n;
-	as.a3 = n;
-	as.a4 = n;
+	as.a1 = cycle[0];
+	as.a2 = cycle[1];
+	as.a3 = cycle[2];
+	as.a4 = cycle[3];
 
-	player = new Player(marioPath, s, marioControls, as);
+	char path[256];
+	char key[] = "SPRT";
+	plFile->read(key, path);
+
+	/*hard wired for now*/
+	ControlSet defaultCtrls;
+	defaultCtrls.goRight = Keyboard::D;
+	defaultCtrls.goLeft = Keyboard::A;
+	defaultCtrls.goUp = Keyboard::W;
+	defaultCtrls.goDown = Keyboard::S;
+	defaultCtrls.teleport = Keyboard::Space;
+	defaultCtrls.ability1 = Keyboard::J;
+	defaultCtrls.ability2 = Keyboard::K;
+	defaultCtrls.ability3 = Keyboard::M;
+	defaultCtrls.ability4 = Keyboard::N;
+
+	player = new Player(path, s, defaultCtrls, as);
 	toBeDrawn.push_back(player);
 	toBeUpd.push_back(player);
 	playerSide.push_back(player);
@@ -210,7 +234,7 @@ static void gameOverHandle() {
 	text.push_back(msg);
 }
 
-// ARGS: 1-stage, 2-...
+// ARGS: 1-stage, 2-player, 3-..
 int main(int argc, char* argv[]) {
 
 	if (argc<2)
@@ -226,7 +250,7 @@ int main(int argc, char* argv[]) {
 	window.setView(view);
 
 	stage = initStage(argv[1]);
-	player = initPlayer();
+	player = initPlayer(argv[2]);
 	opponent = initOpponent();
 
 	initOverScreen();

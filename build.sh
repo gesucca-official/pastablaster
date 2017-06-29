@@ -22,4 +22,4 @@ g++ bin/main.o bin/engine.o bin/Player.o bin/Persona.o bin/Bullet.o bin/load.so 
 rm bin/*.o
 
 # run that shit
-./bin/combat ./dat/demo.stage
+./bin/combat ./dat/demo.stage ./dat/demo.player
