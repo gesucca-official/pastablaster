@@ -3,6 +3,11 @@
 #include "load.h"
 
 //#define WINDOWS
+//#define DEBUG
+
+#ifdef DEBUG
+	#include <stdio.h>
+#endif
 
 #ifdef WINDOWS
 	#define EXPORT_DLL extern "C" __declspec(dllexport)
@@ -11,6 +16,10 @@
 #endif
 
 EXPORT_DLL void DatFile::read(char key[], char res[]) {
+
+	#ifdef DEBUG
+		printf("Loader module, reading string...\n");
+	#endif
 
 	char line[256];
 	char readKey[5]; //4 chars to name stuff is hardcoded in dat file
@@ -29,9 +38,17 @@ EXPORT_DLL void DatFile::read(char key[], char res[]) {
 	}
 
 	rewind(file);
+
+	#ifdef DEBUG
+		printf("...read into buffer: %s\n", res);
+	#endif
 }
 
 EXPORT_DLL float DatFile::read(char key[]) {
+
+	#ifdef DEBUG
+		printf("Loader module, reading float...\n");
+	#endif
 
 	char line[256];
 	char readKey[5]; //4 chars to name stuff is hardcoded in dat file
@@ -50,5 +67,10 @@ EXPORT_DLL float DatFile::read(char key[]) {
 	}
 
 	rewind(file);
+
+	#ifdef DEBUG
+		printf("...returning %f\n", atof(res));
+	#endif
+
 	return atof(res);
 }
