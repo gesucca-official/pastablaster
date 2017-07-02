@@ -4,7 +4,7 @@
 #include "headers/characters.h"
 #include "../loader/load.h"
 
-#define DEBUG
+//#define DEBUG
 
 #ifdef DEBUG
 	#include <stdio.h>
@@ -118,7 +118,6 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 }
 
 Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide) {
-
 	DatFile* plFile = new DatFile(file);
 	char hp[] = "MXHP", mp[] = "MXMP", regen[] = "MNRG", weight[] = "WGHT",
 	collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", tele[] = "TLPT";
@@ -148,58 +147,79 @@ Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<Modele
 	return opponent;
 }
 
-
-// THIS IS THE BASTARD!!! SPLIT IT UP!!! ONE THING AT TIME!!!
-void initOverScreen(Bar *pBar, Bar *oBar, Shape *playerLifeBar, Shape *oppoLifeBar, Shape *playerManaBar, Font * font, vector<Text*> &text) {
-
-	// read this from proper place
-	char opponent[] = "big bad pipa rigata";
-	char player[] = "little poor fusillo";
-
-	/**soma magic numbers here*/
-
-	/*skins*/
+Bar* initPlayerBar() {
 	char pImg[] = "./img/pbar.png";
-	pBar = new Bar(pImg);
+	Bar* pBar = new Bar(pImg);
 	pBar->setSpriteScale(1.8f);
-	//pBar->setPos(0.0f, 0.0f);
 	
+	return pBar;
+}
+
+Bar* initOppoBar() {
 	char oImg[] = "./img/obar.png";
-	oBar = new Bar(oImg);
+	Bar* oBar = new Bar(oImg);
 	oBar->setSpriteScale(1.8f);
 	oBar->setPos(825.0f, 0.0f);
 
-	/*rectangle fills*/
-	playerLifeBar = new RectangleShape(Vector2f(450.0, 30.0));
+	return oBar;
+}
+
+Shape* initPlayerHp() {
+	Shape* playerLifeBar = new RectangleShape(Vector2f(450.0, 30.0));
 	playerLifeBar->setPosition(50.0, 50.0);
 	playerLifeBar->setFillColor(LIFE_GOOD);
-	playerManaBar = new RectangleShape(Vector2f(250.0, 10.0));
+
+	return playerLifeBar;
+}
+
+Shape* initPlayerMp() {
+	Shape* playerManaBar = new RectangleShape(Vector2f(250.0, 10.0));
 	playerManaBar->setPosition(80.0, 80.0);
 	playerManaBar->setFillColor(MANA);
 
-	oppoLifeBar = new RectangleShape(Vector2f(430.0, 30.0));
+	return playerManaBar;
+}
+
+Shape* initOppoHp() {
+	Shape* oppoLifeBar = new RectangleShape(Vector2f(430.0, 30.0));
 	oppoLifeBar->setOrigin(430.0, 0.0f);
 	oppoLifeBar->setPosition(1300.0, 50.0);
 	oppoLifeBar->setFillColor(OPPO_LIFE);
 
-	font = new Font();
-	font->loadFromFile("./fnt/slp.ttf");
+	return oppoLifeBar;
+}
+
+Text* initPlayerName(char* file, Font* font, vector<Text*> &text) {
+	DatFile* plFile = new DatFile(file);
+	char name[MAX_PATH_LEN];
+	char key[] = "PLNM";
+	plFile->read(key, name);
 
 	Text *plName = new Text();
 	plName->setFont(*font);
-	plName->setString(player);
+	plName->setString(name);
 	plName->setColor(Color(0,26,0,255));
 	plName->setCharacterSize(24);
 	plName->setPosition(280.0f, 15.0f);
 
+	text.push_back(plName);
+	return plName;
+}
+
+Text* initOppoName(char* file, Font* font, vector<Text*> &text) {
+	DatFile* opFile = new DatFile(file);
+	char name[MAX_PATH_LEN];
+	char key[] = "OPNM";
+	opFile->read(key, name);
+
 	Text *oppoName = new Text();
 	oppoName->setFont(*font);
-	oppoName->setString(opponent);
+	oppoName->setString(name);
 	oppoName->setCharacterSize(24);
-	oppoName->setOrigin(24*strlen(opponent), 0.0);
+	oppoName->setOrigin(24*strlen(name), 0.0);
 	oppoName->setColor(Color(26,0,0,255));
 	oppoName->setPosition(1360.0f, 15.0f);
 
-	text.push_back(plName);
 	text.push_back(oppoName);
+	return oppoName;
 }

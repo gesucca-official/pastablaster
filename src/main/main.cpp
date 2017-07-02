@@ -1,45 +1,4 @@
-#include "headers/main.h"
-#include "headers/characters.h"
-
-#define DEBUG
-
-#ifdef DEBUG
-	#include <stdio.h>
-#endif
-
-using namespace sf;
-using std::vector;
-
-Stage* stage;
-Player* player;
-Persona* opponent;
-
-Shape* playerLifeBar;
-Shape* oppoLifeBar;
-Shape* playerManaBar;
-Bar* pBar;
-Bar* oBar;
-
-Font* font;
-vector<Text*> text;
-
-vector<DrawableObj*> toBeDrawn;
-vector<ModeledObj*> toBeUpd;
-vector<ModeledObj*> playerSide;
-vector<ModeledObj*> oppoSide;
-
-bool gamePaused = false;
-bool gameOver = false;
-bool playerWon = false;
-
-Stage* initStage(char* file, vector<DrawableObj*> &toBeDrawn);
-Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide);
-Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide);
-void initOverScreen(Bar *pBar, Bar *oBar, Shape *playerLifeBar, Shape *oppoLifeBar, Shape *playerManaBar, Font * font, vector<Text*> &text);
-
-void garbageCollection(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppoSide);
-void detectCollisions(vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppoSide);
-void removeOutOfField(sf::FloatRect bound, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppoSide);
+#include "headers/main_decl.h"
 
 static bool overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
@@ -55,8 +14,7 @@ static bool overScreenLogic() {
 	oppoLifeBar->setScale(oLifePercent, 1.0);
 
 	const float epsilon = 0.5f;
-	if (oLifePercent < epsilon)
-	{
+	if (oLifePercent < epsilon)	{
 		playerWon = true;
 		return true;
 	}
@@ -73,13 +31,11 @@ static void gameOverHandle() {
 	msg->setFont(*font);
 	msg->setCharacterSize(56);
 
-	if (!playerWon)
-	{
+	if (!playerWon)	{
 		msg->setString("YOU LOST. GAME OVER.");
 		msg->setColor(Color(240,30,0,255));
 	}
-	else if (playerWon)
-	{
+	else if (playerWon)	{
 		msg->setString("YOU WON!!!");
 		msg->setColor(Color(30,255,15,255));
 	}
@@ -112,8 +68,7 @@ int main(int argc, char* argv[]) {
 	View view(FloatRect(0, 0, WINDOW_SIZE_X, WINDOW_SIZE_Y));
 	window.setView(view);
 
-	if (argc!=4)
-	{
+	if (argc!=4) {
 		printf("INCORRECT NUMBER OF ARGUMENTS - what the hell are you trying to do?");
 		return EXIT_FAILURE;
 	}
@@ -122,17 +77,26 @@ int main(int argc, char* argv[]) {
 	player = initPlayer(argv[2], toBeDrawn, toBeUpd, playerSide);
 	opponent = initOpponent(argv[3], toBeDrawn, toBeUpd, oppoSide);
 
-	//split iiiiiiit
-	//initOverScreen(pBar, oBar, playerLifeBar, oppoLifeBar, playerManaBar, font, text);
+	font = new Font();
+	font->loadFromFile("./fnt/slp.ttf");
+	initPlayerName(argv[2], font, text);
+	initOppoName(argv[3], font, text);
+
+	pBar = initPlayerBar();
+	oBar = initOppoBar();
+
+	playerLifeBar = initPlayerHp();
+	playerManaBar = initPlayerMp();
+	oppoLifeBar = initOppoHp();
 
 	// Start the game loop
 	while (window.isOpen()) {
 
 		// life and mana display logic
-		//gameOver = overScreenLogic();
+		gameOver = overScreenLogic();
 
-		//if (gameOver)
-		//	gameOverHandle();
+		if (gameOver)
+			gameOverHandle();
 
 		// Process events
 		Event event;
@@ -169,8 +133,8 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
 
-		//draw non game objects here
-		/*window.draw(*playerLifeBar);
+		// over screen life bars
+		window.draw(*playerLifeBar);
 		window.draw(*playerManaBar);
 		window.draw(*oppoLifeBar);
 		pBar -> draw(window);
@@ -178,7 +142,7 @@ int main(int argc, char* argv[]) {
 
 		for (int i = 0; i < text.size(); i++)
 			window.draw(*text[i]);
-*/
+
 		window.display();
 	}
 	return EXIT_SUCCESS;
