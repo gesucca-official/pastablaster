@@ -10,38 +10,13 @@
 	#include <stdio.h>
 #endif
 
-Stage* initStage(char* file, vector<DrawableObj*> &toBeDrawn) {
-
-	char stagePath[MAX_PATH_LEN];
-	char musicPath[MAX_PATH_LEN];
-	char skey[] = "BKGD", mkey[] = "TRCK";
-
-	DatFile* f = new DatFile(file);
-	f->read(skey, stagePath);
-	f->read(mkey, musicPath);
-
-	#ifdef DEBUG
-		printf("initStage:\n");
-		printf("	img path: %s\n", stagePath);
-		printf("	music path: %s\n", musicPath);
-	#endif
-
-	Stage *stage = new Stage(stagePath, WINDOW_SIZE_X, musicPath);
-
-	stage->music->setLoop(true);
-	stage->music->play();
-	stage->music->setVolume(100);
-
-	toBeDrawn.push_back(stage);
-	return stage;
-}
-
-
-Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+static Stats initStats(char* file) {
 
 	DatFile* plFile = new DatFile(file);
+
 	char hp[] = "MXHP", mp[] = "MXMP", regen[] = "MNRG", weight[] = "WGHT",
-	collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", tele[] = "TLPT";
+		collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", 
+		tele[] = "TLPT";
 
 	Stats s;
 	s.maxHp = plFile->read(hp);
@@ -55,7 +30,15 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 	s.accel = plFile->read(acc);
 	s.decel = plFile->read(dec);
 	s.teleportDist = plFile->read(tele);
-	
+
+	delete plFile;
+	return s;
+}
+
+static AbilitySet initAbilities(char* file) {
+
+	DatFile* plFile = new DatFile(file);
+
 	Ability a1, a2, a3, a4;
 	Ability cycle[] = {a1, a2, a3, a4};
 	int i;
@@ -64,6 +47,7 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 		char ability[64], path[64];
 		sprintf(ability, "ABL%d", i+1);
 		plFile->read(ability, path);
+
 		DatFile* abFile = new DatFile(path);
 
 		char dmg[] = "DAMG", bweigth[] = "BWGT", bspeed[] = "BSPE", shtspd[] = "SSPE",
@@ -85,6 +69,8 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 		cycle[i].explFrames = abFile->read(frames);
 		cycle[i].explDecay = abFile->read(decay);
 		cycle[i].crazyness = abFile->read(crazy);
+
+		delete abFile;
 	}
 
 	AbilitySet as;
@@ -92,6 +78,45 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 	as.a2 = cycle[1];
 	as.a3 = cycle[2];
 	as.a4 = cycle[3];
+
+	return as;
+}
+
+Stage* initStage(char* file, vector<DrawableObj*> &toBeDrawn) {
+
+	char stagePath[MAX_PATH_LEN];
+	char musicPath[MAX_PATH_LEN];
+	char skey[] = "BKGD", mkey[] = "TRCK";
+
+	DatFile* f = new DatFile(file);
+
+	f->read(skey, stagePath);
+	f->read(mkey, musicPath);
+
+	#ifdef DEBUG
+		printf("initStage:\n");
+		printf("	img path: %s\n", stagePath);
+		printf("	music path: %s\n", musicPath);
+	#endif
+
+	Stage *stage = new Stage(stagePath, WINDOW_SIZE_X, musicPath);
+
+	stage->music->setLoop(true);
+	stage->music->play();
+	stage->music->setVolume(100);
+
+	toBeDrawn.push_back(stage);
+
+	delete f;
+	return stage;
+}
+
+Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide) {
+
+	Stats s = initStats(file);
+	AbilitySet as = initAbilities(file);
+	
+	DatFile* plFile = new DatFile(file);
 
 	char path[MAX_PATH_LEN];
 	char key[] = "SPRT";
@@ -114,36 +139,26 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 	toBeUpd.push_back(player);
 	playerSide.push_back(player);
 
+	delete plFile;
 	return player;
 }
 
 Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide) {
-	DatFile* plFile = new DatFile(file);
-	char hp[] = "MXHP", mp[] = "MXMP", regen[] = "MNRG", weight[] = "WGHT",
-	collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", tele[] = "TLPT";
+		
+	Stats s = initStats(file);
 
-	Stats s;
-	s.maxHp = plFile->read(hp);
-	s.hp = s.maxHp;
-	s.maxMp = plFile->read(mp);
-	s.mp = s.maxMp;
-	s.manaRegen = plFile->read(regen);
-	s.weigth = plFile->read(weight);
-	s.collisionDmg = plFile->read(collDmg);
-	s.maxSpeed = plFile->read(spe);
-	s.accel = plFile->read(acc);
-	s.decel = plFile->read(dec);
-	s.teleportDist = plFile->read(tele);
+	DatFile* plFile = new DatFile(file);
 
 	char path[MAX_PATH_LEN];
 	char key[] = "SPRT";
 	plFile->read(key, path);
 
-	Persona *opponent = new Persona(path, 1000, 500, s);
+	Persona *opponent = new Persona(path, 1150, 400, s);
 	toBeDrawn.push_back(opponent);
 	toBeUpd.push_back(opponent);
 	oppoSide.push_back(opponent);
 
+	delete plFile;
 	return opponent;
 }
 
@@ -190,7 +205,9 @@ Shape* initOppoHp() {
 }
 
 Text* initPlayerName(char* file, Font* font, vector<Text*> &text) {
+
 	DatFile* plFile = new DatFile(file);
+
 	char name[MAX_PATH_LEN];
 	char key[] = "PLNM";
 	plFile->read(key, name);
@@ -203,11 +220,15 @@ Text* initPlayerName(char* file, Font* font, vector<Text*> &text) {
 	plName->setPosition(280.0f, 15.0f);
 
 	text.push_back(plName);
+
+	delete plFile;
 	return plName;
 }
 
 Text* initOppoName(char* file, Font* font, vector<Text*> &text) {
+
 	DatFile* opFile = new DatFile(file);
+
 	char name[MAX_PATH_LEN];
 	char key[] = "OPNM";
 	opFile->read(key, name);
@@ -221,5 +242,7 @@ Text* initOppoName(char* file, Font* font, vector<Text*> &text) {
 	oppoName->setPosition(1360.0f, 15.0f);
 
 	text.push_back(oppoName);
+
+	delete opFile;
 	return oppoName;
 }
