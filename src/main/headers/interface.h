@@ -1,6 +1,6 @@
 #include <SFML/Window.hpp>
 
-#define MAX_PATH_LEN 30
+#define MAX_PATH_LEN 128
 
 using namespace sf;
 

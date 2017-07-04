@@ -1,4 +1,6 @@
-#include "headers/engine.h"
+#include "headers/objects.h"
+
+using std::vector;
 
 void garbageCollection(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide, vector<ModeledObj*> &oppoSide) {
 

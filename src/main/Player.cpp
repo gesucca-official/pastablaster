@@ -2,7 +2,7 @@
 
 using namespace std;
 
-Player::Player(char img[], Stats s, ControlSet ctrl, AbilitySet a) : Persona(img, 100, 100, s) {
+Player::Player(char img[], Stats s, ControlSet ctrl, AbilitySet a) : Persona(img, 150, 400, s) {
 	controls = ctrl;
 	abilities = a;
 
