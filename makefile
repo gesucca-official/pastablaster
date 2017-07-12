@@ -1,24 +1,23 @@
-bin/combat: bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bin/Bullet.o bin/load.so
-	g++ bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bin/Bullet.o bin/load.so -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system -o bin/combat
+CC = g++ -O3
 
-bin/main.o:
-	g++ -c src/main/main.cpp -o bin/main.o
+MAIN_HEADERS = src/main/headers/characters.h src/main/headers/interface.h src/main/headers/main.h src/main/headers/main_decl.h src/main/headers/models.h src/main/headers/objects.h 
+MAIN_OBJECTS = bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bin/Bullet.o
+LIBS = bin/load.so
+SFML = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 
-bin/inits.o:
-	g++ -c src/main/inits.cpp -o bin/inits.o
+# main module
+bin/combat: $(MAIN_OBJECTS) $(LIBS)
+	$(CC) $(MAIN_OBJECTS) $(LIBS) $(SFML) -o bin/combat
 
-bin/engine.o:
-	g++ -c src/main/engine.cpp -o bin/engine.o
+bin/%.o : src/main/%.cpp $(MAIN_HEADERS)
+	$(CC) -c $< -o $@ 
 
-bin/Player.o:
-	g++ -c src/main/Player.cpp -o bin/Player.o
+# loader module
+bin/load.so: src/loader/load.cpp src/loader/load.h
+	$(CC) -c -fPIC src/loader/load.cpp -o bin/load.o
+	$(CC) -shared bin/load.o -o bin/load.so
 
-bin/Persona.o:
-	g++ -c src/main/Persona.cpp -o bin/Persona.o
+final: bin/combat
+	rm bin/*.o
+	
 
-bin/Bullet.o:
-	g++ -c src/main/Bullet.cpp -o bin/Bullet.o
-
-bin/load.so:
-	g++ -c -fPIC src/loader/load.cpp -o bin/load.o
-	g++ -shared bin/load.o -o bin/load.so

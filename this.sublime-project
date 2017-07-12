@@ -2,8 +2,9 @@
 	"build_systems":
 	[
 		{
-			"cmd": "./clean_build.sh",
-			"name": "Clean Build and Run",
+			"cmd": "make final",
+			"shell":true,
+			"name": "Final Build",
 			"working_dir": "${project_path:${folder}}"
 		},
 		{
