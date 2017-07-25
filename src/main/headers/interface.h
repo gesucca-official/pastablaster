@@ -51,5 +51,6 @@ typedef struct {
 	float accel;
 	float decel;
 	float teleportDist;
+	float decisionPace;
 	AbilitySet ws;
 } Stats;

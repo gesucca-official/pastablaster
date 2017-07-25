@@ -103,6 +103,7 @@ int main(int argc, char* argv[]) {
 		while (window.pollEvent(event)) {
 
 			player->handleControls(event, toBeDrawn, toBeUpd, playerSide);
+			opponent->handleAI(toBeDrawn, toBeUpd, oppoSide);
 
 			if (event.type == Event::KeyPressed) {
 				// ESC BUTTON: exit

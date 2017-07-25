@@ -1,7 +1,7 @@
 CC = g++ -O3
 
 MAIN_HEADERS = src/main/headers/characters.h src/main/headers/interface.h src/main/headers/main.h src/main/headers/main_decl.h src/main/headers/models.h src/main/headers/objects.h 
-MAIN_OBJECTS = bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bin/Bullet.o
+MAIN_OBJECTS = bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bin/Opponent.o bin/Bullet.o
 LIBS = bin/load.so
 SFML = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 

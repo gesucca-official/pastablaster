@@ -16,7 +16,7 @@ static Stats initStats(char* file) {
 
 	char hp[] = "MXHP", mp[] = "MXMP", regen[] = "MNRG", weight[] = "WGHT",
 		collDmg[] = "CLLD", spe[] = "MXSP", acc[] = "ACCL", dec[] = "DCCL", 
-		tele[] = "TLPT";
+		tele[] = "TLPT", decision[] = "DCSP";
 
 	Stats s;
 	s.maxHp = plFile->read(hp);
@@ -30,6 +30,7 @@ static Stats initStats(char* file) {
 	s.accel = plFile->read(acc);
 	s.decel = plFile->read(dec);
 	s.teleportDist = plFile->read(tele);
+	s.decisionPace = plFile->read(decision);
 
 	delete plFile;
 	return s;
@@ -143,9 +144,10 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 	return player;
 }
 
-Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide) {
-		
+Opponent* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide) {
+
 	Stats s = initStats(file);
+	AbilitySet as = initAbilities(file);
 
 	DatFile* plFile = new DatFile(file);
 
@@ -153,13 +155,14 @@ Persona* initOpponent(char* file, vector<DrawableObj*> &toBeDrawn, vector<Modele
 	char key[] = "SPRT";
 	plFile->read(key, path);
 
-	Persona *opponent = new Persona(path, 1150, 400, s);
+	Opponent *opponent = new Opponent(path, s, as);
 	toBeDrawn.push_back(opponent);
 	toBeUpd.push_back(opponent);
 	oppoSide.push_back(opponent);
 
 	delete plFile;
 	return opponent;
+
 }
 
 Bar* initPlayerBar() {

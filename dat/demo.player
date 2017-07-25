@@ -8,6 +8,7 @@ MXSP=8.0
 ACCL=1.2
 DCCL=0.8
 TLPT=180.0
+DCSP=0.0
 ABL1=./dat/default1.ability
 ABL2=./dat/default2.ability
 ABL3=./dat/default3.ability

@@ -57,7 +57,6 @@ public:
 	void collide(ModeledObj &collided);
 	void run(Direction d);
 	void stop();
-	void turnBack();
 	void teleport();
 };
 

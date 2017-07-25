@@ -20,3 +20,14 @@ private:
 	void crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide);
 	void crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &playerSide);
 };
+
+class Opponent : public Persona {
+public:
+	Opponent(char img[], Stats s, AbilitySet a);
+	void update(sf::FloatRect fieldBounds);
+	void handleAI(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide);
+private:
+	int baseDP;
+	int decisionPace;
+	void basicAttack(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide);
+};
