@@ -14,11 +14,20 @@ void Opponent::update(sf::FloatRect fieldBounds) {
 // ok, this is a total, fucking mess
 void Opponent::handleAI(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide) {
 	
-	if (decisionPace == 0) {
-
+	// counter this if too close to borders!!
+	// magic numberssss, magic constants, I love magic!
+	if (sprite->getPosition().x > 1200)
+		run(W);
+	else if (sprite->getPosition().x < 350)
+		run(E);
+	else if (sprite->getPosition().y < 400)
+		run(S);
+	else if (sprite->getPosition().y > 700)
+		run(N);
+	
+	else if (decisionPace == baseDP) {
 		//movement
 		float wellThoughtDecision  = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-		//std::cout << wellThoughtDecision;
 
 		if (wellThoughtDecision < 0.20f)
 			run(E);
@@ -32,33 +41,10 @@ void Opponent::handleAI(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &to
 			stop();
 
 		// reset countdown
-		decisionPace = baseDP;
+		decisionPace = 0;
 	}
-
 	else
-	{
-		//stop();
-		decisionPace--;
-	}
-
-	// counter this if too close to borders!!
-		// magic numberssss, magic constants, I love magic!
-		if (sprite->getPosition().x > 1200)
-			run(W);
-		else if (sprite->getPosition().x < 350)
-			run(E);
-
-		else if (sprite->getPosition().y < 200)
-			run(S);
-		else if (sprite->getPosition().y > 700)
-			run(N);
-
-		cout << "\n";
-		cout<<sprite->getPosition().x;
-		cout << "x\n";
-		cout<<sprite->getPosition().y;
-		cout << "y\n";
-
+		decisionPace++;
 }
 
 // ability 1
