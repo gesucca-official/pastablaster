@@ -88,14 +88,16 @@ public:
 class CrazyBullet : public Bullet {
 private:
 	int crazyness;
+	bool isBad;
 	int r, g, b;
 	bool hueUp;
 
 public:
-	inline CrazyBullet(char img[], char explImg[], char soundfx[], int posX, int posY, Direction dir, Ability a, int c) : Bullet(img, explImg, soundfx, posX, posY, dir, a) {
+	inline CrazyBullet(char img[], char explImg[], char soundfx[], int posX, int posY, Direction dir, Ability a, int c, bool bad) : Bullet(img, explImg, soundfx, posX, posY, dir, a) {
 		r = 255, g = 255, b = 255;
 		hueUp = true;
 		crazyness = c;
+		isBad = bad;
 	}
 	void update(FloatRect fieldBounds);
 };

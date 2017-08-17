@@ -29,5 +29,7 @@ public:
 private:
 	int baseDP;
 	int decisionPace;
+	AbilitySet abilities;
+
 	void basicAttack(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &toBeUpd, vector<ModeledObj*> &oppoSide);
 };

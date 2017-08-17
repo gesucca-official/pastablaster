@@ -12,6 +12,7 @@ Bullet::Bullet(char img[], char explImg[], char soundfx[], int posX, int posY, D
 	//default position
 	sprite->move(posX, posY);
 	sprite->setOrigin(sprite->getTexture()->getSize().x / 2, sprite->getTexture()->getSize().y / 2);
+	sprite->setColor(sf::Color(180, 180, 180, 240));
 
 	explTexture.loadFromFile(explImg);
 	explTexture.setSmooth(true);
@@ -105,6 +106,11 @@ void CrazyBullet::update(sf::FloatRect fieldBounds) {
 			hueUp = true;
 		}
 
+	}
+	if (isBad){
+		b -= 5;
+		r -= 5;
+		g -= 5;
 	}
 	sprite->setColor(sf::Color(r, g, b, 255));
 

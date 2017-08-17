@@ -131,7 +131,7 @@ void Player::crazyBullet(vector<DrawableObj*> &toBeDrawn, vector<ModeledObj*> &t
 
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
-	Bullet *bullet = new CrazyBullet(abilities.a3.bulletImg, abilities.a3.bulletExplImg, abilities.a3.bulletSoundFx, position.x, position.y, dir, abilities.a3, abilities.a3.crazyness);
+	Bullet *bullet = new CrazyBullet(abilities.a3.bulletImg, abilities.a3.bulletExplImg, abilities.a3.bulletSoundFx, position.x, position.y, dir, abilities.a3, abilities.a3.crazyness, false);
 	bullet->setSpriteScale(0.3f);
 	bullet->setExplScale(0.6f);
 
@@ -156,10 +156,10 @@ void Player::crazyBulletsBarrage(vector<DrawableObj*> &toBeDrawn, vector<Modeled
 	sf::Vector2f position = DrawableObj::sprite->getPosition();
 
 	vector<Bullet*> shots;
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, N, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, S, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, E, abilities.a4, abilities.a4.crazyness));
-	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, W, abilities.a4, abilities.a4.crazyness));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, N, abilities.a4, abilities.a4.crazyness, false));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, S, abilities.a4, abilities.a4.crazyness, false));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, E, abilities.a4, abilities.a4.crazyness, false));
+	shots.push_back(new CrazyBullet(abilities.a4.bulletImg, abilities.a4.bulletExplImg, abilities.a4.bulletSoundFx, position.x, position.y, W, abilities.a4, abilities.a4.crazyness, false));
 
 	for (int i = 0; i < shots.size(); i++) {
 		shots[i]->setSpriteScale(0.2f);
