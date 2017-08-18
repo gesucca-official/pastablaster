@@ -1,5 +1,7 @@
 #include "headers/main_decl.h"
 
+#include <iostream>
+
 static bool overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
 	playerLifeBar->setScale(pLifePercent, 1.0);
@@ -29,14 +31,14 @@ static void gameOverHandle() {
 	
 	Text* msg = new Text();
 	msg->setFont(*font);
-	msg->setCharacterSize(56);
+	msg->setCharacterSize(65);
 
 	if (!playerWon)	{
-		msg->setString("YOU LOST. GAME OVER.");
+		msg->setString("	YOU LOST. GAME OVER.\n\nPress ENTER to continue");
 		msg->setColor(Color(240,30,0,255));
 	}
 	else if (playerWon)	{
-		msg->setString("YOU WON!!!");
+		msg->setString("		YOU WON\n\nPress ENTER to continue");
 		msg->setColor(Color(30,255,15,255));
 	}
 
@@ -89,8 +91,26 @@ int main(int argc, char* argv[]) {
 	playerManaBar = initPlayerMp();
 	oppoLifeBar = initOppoHp();
 
+	// pause text: find a better place??
+	Text* pauseString1= new Text();
+	pauseString1->setFont(*font);
+	pauseString1->setCharacterSize(52);
+	pauseString1->setString("		GAME PAUSED\n\n	Press ENTER to exit\nPress ESC to resume game");
+	pauseString1->setColor(Color(30,10,230,255));
+	//center text
+	sf::FloatRect textRect = pauseString1->getLocalBounds();
+	pauseString1->setOrigin(textRect.left + textRect.width/2.0f,
+	textRect.top  + textRect.height/2.0f);
+	pauseString1->setPosition(sf::Vector2f(WINDOW_SIZE_X/2.0f,WINDOW_SIZE_Y/2.0f));
+	pauseText.push_back(pauseString1);
+
+	int ready = 60;
+
 	// Start the game loop
 	while (window.isOpen()) {
+
+		if (ready > 0)
+			ready --;
 
 		// life and mana display logic
 		gameOver = overScreenLogic();
@@ -102,22 +122,24 @@ int main(int argc, char* argv[]) {
 		Event event;
 		while (window.pollEvent(event)) {
 
-			player->handleControls(event, toBeDrawn, toBeUpd, playerSide);
-			opponent->handleAI(toBeDrawn, toBeUpd, oppoSide);
-
+			if (!gamePaused && !gameOver && ready == 0) {
+				player->handleControls(event, toBeDrawn, toBeUpd, playerSide);
+				opponent->handleAI(toBeDrawn, toBeUpd, oppoSide);
+			}
+			
 			if (event.type == Event::KeyPressed) {
-				// ESC BUTTON: exit
-				if (event.key.code == Keyboard::Escape)
-					window.close();
-
-				// P: pause
-				if (event.key.code == Keyboard::P) {
-					if (gamePaused) {
+				// ESC BUTTON: pause
+				if (event.key.code == Keyboard::Escape) {
+					if (gamePaused) 
 						gamePaused = false;
-					} else {
+					else
 						gamePaused = true;
-					}
 				}
+
+				if (gamePaused || gameOver)
+					if (event.key.code == Keyboard::Return) 
+						window.close();
+						// also reopen launcher or stuff
 			}
 		}
 
@@ -126,10 +148,9 @@ int main(int argc, char* argv[]) {
 		detectCollisions(playerSide, oppoSide);
 		garbageCollection(toBeDrawn, toBeUpd, playerSide, oppoSide);
 
-		if (!gamePaused && !gameOver) {
+		if (!gamePaused && !gameOver)
 			for (int i = 0; i < toBeUpd.size(); i++)
 				toBeUpd[i]->update(stage->getBound());
-		}
 
 		for (int i = 0; i < toBeDrawn.size(); i++)
 			toBeDrawn[i]->draw(window);
@@ -143,6 +164,10 @@ int main(int argc, char* argv[]) {
 
 		for (int i = 0; i < text.size(); i++)
 			window.draw(*text[i]);
+
+		if (gamePaused)
+			for (int i = 0; i < pauseText.size(); i++)
+				window.draw(*pauseText[i]);
 
 		window.display();
 	}

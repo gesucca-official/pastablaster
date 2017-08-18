@@ -26,6 +26,8 @@ vector<ModeledObj*> toBeUpd;
 vector<ModeledObj*> playerSide;
 vector<ModeledObj*> oppoSide;
 
+vector<Text*> pauseText;
+
 bool gamePaused = false;
 bool gameOver = false;
 bool playerWon = false;
