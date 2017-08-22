@@ -15,6 +15,7 @@ public:
 
 		music = new Music();
 		music->openFromFile(m);
+		music->setVolume(50);
 	}
 
 	inline FloatRect getBound() {

@@ -9,5 +9,5 @@ ACCL=1.6
 DCCL=0.2
 TLPT=180.0
 DCSP=40.0
-ABL1=./dat/default1.ability
+ABL1=./dat/default_oppo.ability
 OPNM=pipa rigatah     

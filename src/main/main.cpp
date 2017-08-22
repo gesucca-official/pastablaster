@@ -26,7 +26,7 @@ static bool overScreenLogic() {
 
 static void gameOverHandle() {
 
-	stage->music->stop();
+	//stage->music->stop();
 	//play something like fanfare
 	
 	Text* msg = new Text();
@@ -38,7 +38,7 @@ static void gameOverHandle() {
 		msg->setColor(Color(240,30,0,255));
 	}
 	else if (playerWon)	{
-		msg->setString("		YOU WON\n\nPress ENTER to continue...");
+		msg->setString("			YOU WON\n\nPress ENTER to continue...");
 		msg->setColor(Color(30,255,15,255));
 	}
 

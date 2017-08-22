@@ -8,6 +8,7 @@ Bullet::Bullet(char img[], char explImg[], char soundfx[], int posX, int posY, D
 	sfxb->loadFromFile(soundfx);
 	sfx = new Sound();
 	sfx->setBuffer(*sfxb);
+	sfx->setVolume(127);
 
 	//default position
 	sprite->move(posX, posY);
