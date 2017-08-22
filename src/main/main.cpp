@@ -15,7 +15,7 @@ static bool overScreenLogic() {
 	float oLifePercent = (float) opponent->getHp() / (float) opponent->getMaxHp();
 	oppoLifeBar->setScale(oLifePercent, 1.0);
 
-	const float epsilon = 0.5f;
+	const float epsilon = 0.1f;
 	if (oLifePercent < epsilon)	{
 		playerWon = true;
 		return true;
