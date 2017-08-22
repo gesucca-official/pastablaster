@@ -34,11 +34,11 @@ static void gameOverHandle() {
 	msg->setCharacterSize(65);
 
 	if (!playerWon)	{
-		msg->setString("	YOU LOST. GAME OVER.\n\nPress ENTER to continue");
+		msg->setString("	YOU LOST. GAME OVER.\n\nPress ENTER to continue...");
 		msg->setColor(Color(240,30,0,255));
 	}
 	else if (playerWon)	{
-		msg->setString("		YOU WON\n\nPress ENTER to continue");
+		msg->setString("		YOU WON\n\nPress ENTER to continue...");
 		msg->setColor(Color(30,255,15,255));
 	}
 
@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 	Text* pauseString1= new Text();
 	pauseString1->setFont(*font);
 	pauseString1->setCharacterSize(52);
-	pauseString1->setString("		GAME PAUSED\n\n	Press ENTER to exit\nPress ESC to resume game");
+	pauseString1->setString("		GAME PAUSED\n\n Press ENTER to exit game\nPress ESC to resume game");
 	pauseString1->setColor(Color(30,10,230,255));
 	//center text
 	sf::FloatRect textRect = pauseString1->getLocalBounds();
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
 	pauseString1->setPosition(sf::Vector2f(WINDOW_SIZE_X/2.0f,WINDOW_SIZE_Y/2.0f));
 	pauseText.push_back(pauseString1);
 
-	int ready = 60;
+	int ready = 45;
 
 	// Start the game loop
 	while (window.isOpen()) {
