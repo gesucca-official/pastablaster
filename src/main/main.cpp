@@ -1,6 +1,8 @@
 #include "headers/main_decl.h"
 
-#include <iostream>
+/*
+* OK, here's a bit of a mess...
+*/
 
 static bool overScreenLogic() {
 	float pLifePercent = (float) player->getHp() / (float) player->getMaxHp();
@@ -137,9 +139,12 @@ int main(int argc, char* argv[]) {
 				}
 
 				if (gamePaused || gameOver)
-					if (event.key.code == Keyboard::Return) 
+					if (event.key.code == Keyboard::Return) {
 						window.close();
-						// also reopen launcher or stuff
+						stage->music->stop();
+						system("./bin/pastablaster");
+						return EXIT_SUCCESS;
+					}
 			}
 		}
 

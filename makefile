@@ -5,6 +5,10 @@ MAIN_OBJECTS = bin/main.o bin/inits.o bin/engine.o bin/Player.o bin/Persona.o bi
 LIBS = bin/load.so
 SFML = -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 
+# launcher module
+bin/pastablaster: bin/combat src/launcher/main.cpp
+	$(CC) src/launcher/main.cpp $(SFML) -o bin/pastablaster
+
 # main module
 bin/combat: $(MAIN_OBJECTS) $(LIBS)
 	$(CC) $(MAIN_OBJECTS) $(LIBS) $(SFML) -o bin/combat
@@ -17,7 +21,5 @@ bin/load.so: src/loader/load.cpp src/loader/load.h
 	$(CC) -c -fPIC src/loader/load.cpp -o bin/load.o
 	$(CC) -shared bin/load.o -o bin/load.so
 
-final: bin/combat
+final: bin/pastablaster
 	rm bin/*.o
-	
-
