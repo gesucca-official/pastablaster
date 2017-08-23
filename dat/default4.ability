@@ -1,7 +1,7 @@
-DAMG=12.50
+DAMG=6.50
 BWGT=6.0
 BSPE=14.0
-SSPE=28.0
+SSPE=5.0
 MCST=35.0
 BIMG=./img/player.png
 EXPL=./img/bang.png

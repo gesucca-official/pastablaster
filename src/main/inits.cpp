@@ -132,8 +132,8 @@ Player* initPlayer(char* file, vector<DrawableObj*> &toBeDrawn, vector<ModeledOb
 	defaultCtrls.teleport = Keyboard::Space;
 	defaultCtrls.ability1 = Keyboard::J;
 	defaultCtrls.ability2 = Keyboard::K;
-	defaultCtrls.ability3 = Keyboard::M;
-	defaultCtrls.ability4 = Keyboard::N;
+	defaultCtrls.ability3 = Keyboard::N;
+	defaultCtrls.ability4 = Keyboard::M;
 
 	Player *player = new Player(path, s, defaultCtrls, as);
 	toBeDrawn.push_back(player);

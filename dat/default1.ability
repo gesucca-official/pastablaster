@@ -1,8 +1,8 @@
-DAMG=12.0
+DAMG=6.0
 BWGT=8.0
 BSPE=12.0
 SSPE=10.0
-MCST=15.0
+MCST=18.0
 BIMG=./img/player.png
 EXPL=./img/bang.png
 SDFX=./snd/fx_2.ogg
